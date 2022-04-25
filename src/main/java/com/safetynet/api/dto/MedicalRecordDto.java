@@ -1,7 +1,9 @@
 package com.safetynet.api.dto;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import com.safetynet.api.entity.Allergie;
@@ -20,7 +22,7 @@ public class MedicalRecordDto implements Serializable {
     public MedicalRecordDto(MedicalRecord mr) {
 	this.firstName = mr.getPerson().getFirstName();
 	this.lastName = mr.getPerson().getLastName();
-	this.birthdate = mr.getBirthdate().toString();
+	this.birthdate = DateFormat.getDateInstance( DateFormat.MEDIUM, Locale.US ).format(mr.getBirthdate());
 	Set<String> newAllergies = new HashSet<String>();
 	for (Allergie a : mr.getRecordAllergies()) { newAllergies.add(a.getAllergieString()); }
 	this.allergies = newAllergies;
