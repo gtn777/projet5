@@ -1,70 +1,94 @@
-DROP TABLE IF EXISTS emails;
-CREATE TABLE emails
+DROP TABLE IF EXISTS fire_station;
+CREATE TABLE fire_station
 (
    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   email VARCHAR (250) NOT NULL
+   station VARCHAR (250) NOT NULL
 );
-DROP TABLE IF EXISTS allergies;
-CREATE TABLE allergies
+DROP TABLE IF EXISTS email;
+CREATE TABLE email
 (
    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   allergie VARCHAR (250) NOT NULL
+   email_address VARCHAR (250) NOT NULL,
+   CONSTRAINT UNIQUE_email_address UNIQUE (email_address)
 );
-DROP TABLE IF EXISTS persons;
-CREATE TABLE persons
+DROP TABLE IF EXISTS phone;
+CREATE TABLE phone
+(
+   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   phone_number VARCHAR (250) NOT NULL,
+   CONSTRAINT UNIQUE_phone_number UNIQUE (phone_number)
+);
+DROP TABLE IF EXISTS home;
+CREATE TABLE home
+(
+   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   address VARCHAR (250) NOT NULL,
+   city VARCHAR (250) NOT NULL,
+   zip VARCHAR (250) NOT NULL,
+   CONSTRAINT UNIQUE_home UNIQUE
+   (
+      address,
+      city,
+      zip
+   )
+);
+DROP TABLE IF EXISTS allergie;
+CREATE TABLE allergie
+(
+   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   allergie_name VARCHAR (250) NOT NULL,
+   CONSTRAINT UNIQUE_allergie UNIQUE (allergie_name)
+);
+DROP TABLE IF EXISTS medication;
+CREATE TABLE medication
+(
+   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   medication_name VARCHAR (250) NOT NULL,
+   CONSTRAINT UNIQUE_medication UNIQUE (medication_name)
+);
+DROP TABLE IF EXISTS person;
+CREATE TABLE person
 (
    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
    first_name VARCHAR (250) NOT NULL,
    last_name VARCHAR (250) NOT NULL,
-   birth_date Date NOT NULL,
-   email_id INT,
-   FOREIGN KEY (email_id) REFERENCES emails (id)
+   email_id INT NOT NULL,
+   phone_id INT NOT NULL,
+   home_id INT NOT NULL,
+   FOREIGN KEY (email_id) REFERENCES email (id),
+   FOREIGN KEY (phone_id) REFERENCES phone (id),
+   FOREIGN KEY (home_id) REFERENCES home (id)
 );
-DROP TABLE IF EXISTS medications;
-CREATE TABLE medications
+DROP TABLE IF EXISTS medical_record;
+CREATE TABLE medical_record
 (
-   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   medication VARCHAR (250) NOT NULL
+   person_id INT PRIMARY KEY NOT NULL,
+   birthdate DATE NOT NULL,
+   FOREIGN KEY (person_id) REFERENCES person (id)
 );
-DROP TABLE IF EXISTS posologies;
-CREATE TABLE posologies
+DROP TABLE IF EXISTS record_allergie;
+CREATE TABLE record_allergie
 (
-   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   posology VARCHAR (250) NOT NULL
-);
-DROP TABLE IF EXISTS treatments;
-CREATE TABLE treatments
-(
-   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   medication_id INT NOT NULL,
-   posology_id INT NOT NULL,
-   FOREIGN KEY (medication_id) REFERENCES medications (id),
-   FOREIGN KEY (posology_id) REFERENCES posologies (id)
-);
-DROP TABLE IF EXISTS person_treatment;
-CREATE TABLE person_treatment
-(
-   person_id INT NOT NULL,
-   treatment_id INT NOT NULL,
-   FOREIGN KEY (person_id) REFERENCES persons (id),
-   FOREIGN KEY (treatment_id) REFERENCES treatments (id),
+   record_id INT NOT NULL,
+   allergie_id INT NOT NULL,
    PRIMARY KEY
    (
-      person_id,
-      treatment_id
-   )
+      record_id,
+      allergie_id
+   ),
+   FOREIGN KEY (record_id) REFERENCES medical_record (person_id),
+   FOREIGN KEY (allergie_id) REFERENCES allergie (id)
 );
-DROP TABLE IF EXISTS homes;
-CREATE TABLE homes
+DROP TABLE IF EXISTS record_medication;
+CREATE TABLE record_medication
 (
-   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-   address VARCHAR (250) NOT NULL,
-   city VARCHAR (250) NOT NULL,
-   zip VARCHAR (250) NOT NULL
-);
-DROP TABLE IF EXISTS fire_stations;
-CREATE TABLE fire_stations
-(
-   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-   station VARCHAR (250) NOT NULL
+   record_id INT NOT NULL,
+   medication_id INT NOT NULL,
+   PRIMARY KEY
+   (
+      record_id,
+      medication_id
+   ),
+   FOREIGN KEY (record_id) REFERENCES medical_record (person_id),
+   FOREIGN KEY (medication_id) REFERENCES medication (id)
 );
