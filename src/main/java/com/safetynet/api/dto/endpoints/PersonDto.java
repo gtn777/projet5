@@ -1,4 +1,4 @@
-package com.safetynet.api.dto;
+package com.safetynet.api.dto.endpoints;
 
 import java.io.Serializable;
 
@@ -21,7 +21,7 @@ public class PersonDto implements Serializable {
 	this.address = person.getHome().getAddress();
 	this.city = person.getHome().getCity();
 	this.zip = person.getHome().getZip();
-	this.email = person.getEmail().getEmailString();
+	this.email = person.getEmail().getEmailAddress();
 	this.phone = person.getPhone().getPhoneNumber();
     }
 

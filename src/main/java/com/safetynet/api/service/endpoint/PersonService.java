@@ -1,4 +1,4 @@
-package com.safetynet.api.service;
+package com.safetynet.api.service.endpoint;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.api.dto.PersonDto;
+import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.Person;
@@ -65,7 +65,7 @@ public class PersonService {
 	    newPerson.setPhone(phoneRepository.save(new Phone(dto.getPhone())));
 	}
 
-	Optional<Email> emailOptional = emailRepository.findByEmailString(dto.getEmail());
+	Optional<Email> emailOptional = emailRepository.findByEmailAddress(dto.getEmail());
 	if (emailOptional.isPresent()) {
 	    newPerson.setEmail(emailOptional.get());
 	} else {
@@ -87,8 +87,8 @@ public class PersonService {
 
 	Person person = personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).get();
 
-	if (dto.getEmail() != person.getEmail().getEmailString()) {
-	    Optional<Email> emailOptional = emailRepository.findByEmailString(dto.getEmail());
+	if (dto.getEmail() != person.getEmail().getEmailAddress()) {
+	    Optional<Email> emailOptional = emailRepository.findByEmailAddress(dto.getEmail());
 	    if (emailOptional.isPresent()) {
 		person.setEmail(emailOptional.get());
 	    } else {

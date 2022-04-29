@@ -10,4 +10,6 @@ import com.safetynet.api.entity.Phone;
 @Repository
 public interface PhoneRepository extends CrudRepository<Phone, Integer> {
     public Optional<Phone> findByPhoneNumber(String phoneNumber);
+    
+//    Iterable<String> findAllPhonePhoneNumberByPersonHomeStation(int station);
 }

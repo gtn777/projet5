@@ -1,6 +1,6 @@
 package com.safetynet.api.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ public class MedicalRecord {
     private Person person;
 
     @Column(name = "birthdate")
-    private Date birthdate;
+    private LocalDate birthdate;
 
     @ManyToMany
     @JoinTable(name = "record_allergie", joinColumns = @JoinColumn(name = "record_id"), inverseJoinColumns = @JoinColumn(name = "allergie_id"))

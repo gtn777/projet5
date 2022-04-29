@@ -10,6 +10,8 @@ import com.safetynet.api.entity.Email;
 @Repository
 public interface EmailRepository extends CrudRepository<Email, Integer> {
 
-    public Optional<Email> findByEmailString(String emailString);
+    public Optional<Email> findByEmailAddress(String emailAddress);
+
+    public Iterable<Email> findAllByPersonsHomeCity(String city);
 
 }

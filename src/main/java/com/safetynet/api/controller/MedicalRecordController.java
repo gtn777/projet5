@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.api.dto.MedicalRecordDto;
-import com.safetynet.api.dto.PersonDto;
+import com.safetynet.api.dto.endpoints.MedicalRecordDto;
+import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.MedicalRecord;
-import com.safetynet.api.service.MedicalRecordService;
+import com.safetynet.api.service.endpoint.MedicalRecordService;
 
 @RestController
 public class MedicalRecordController {

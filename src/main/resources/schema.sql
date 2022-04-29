@@ -1,9 +1,3 @@
-DROP TABLE IF EXISTS fire_station;
-CREATE TABLE fire_station
-(
-   id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   station VARCHAR (250) NOT NULL
-);
 DROP TABLE IF EXISTS email;
 CREATE TABLE email
 (
@@ -25,6 +19,7 @@ CREATE TABLE home
    address VARCHAR (250) NOT NULL,
    city VARCHAR (250) NOT NULL,
    zip VARCHAR (250) NOT NULL,
+   fire_station INT,
    CONSTRAINT UNIQUE_home UNIQUE
    (
       address,

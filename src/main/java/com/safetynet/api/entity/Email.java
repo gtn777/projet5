@@ -24,13 +24,12 @@ import lombok.EqualsAndHashCode;
 @Table(name = "email")
 public class Email implements Serializable {
 
-    private static final long serialVersionUID = 326549871L;
+    private static final long serialVersionUID = 3265549871L;
 
-    public Email() {
-    }
+    public Email() {}
 
-    public Email(String emailString) {
-	this.emailString = emailString;
+    public Email(String emailAddress) {
+	this.emailAddress = emailAddress;
     }
 
     @Id
@@ -38,9 +37,9 @@ public class Email implements Serializable {
     private int id;
 
     @Column(name = "email_address", unique = true)
-    private String emailString;
+    private String emailAddress;
 
-    @OneToMany(mappedBy = "email", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "email", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<Person> persons = new HashSet<Person>();

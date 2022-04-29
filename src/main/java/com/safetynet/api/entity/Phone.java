@@ -40,7 +40,7 @@ public class Phone implements Serializable {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "phone", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "phone", targetEntity = Person.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<Person> persons = new HashSet<Person>();

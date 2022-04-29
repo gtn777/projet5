@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,15 +26,14 @@ public class Home implements Serializable {
 
     private static final long serialVersionUID = 6835112859185725245L;
 
-    public Home() {
-	
-    }
-    
+    public Home() {}
+
     public Home(String address, String city, String zip) {
 	this.address = address;
 	this.city = city;
 	this.zip = zip;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -49,8 +47,12 @@ public class Home implements Serializable {
     @Column
     private String zip;
 
-    @OneToMany(mappedBy = "home", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "home", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<Person> persons = new HashSet<Person>();
+
+    @Column(name = "fire_station", nullable = true)
+    private int station;
+
 }

@@ -56,12 +56,11 @@ public class Person implements Serializable {
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private Home home;
-    
-    @OneToOne(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "person",targetEntity = MedicalRecord.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private MedicalRecord medicalRecord;
-    
 
 }

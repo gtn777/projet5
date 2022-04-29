@@ -1,7 +1,9 @@
-package com.safetynet.api.service;
+package com.safetynet.api.service.endpoint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -9,7 +11,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.api.dto.MedicalRecordDto;
+import com.safetynet.api.dto.endpoints.MedicalRecordDto;
 import com.safetynet.api.entity.Allergie;
 import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.entity.Medication;
@@ -48,7 +50,7 @@ public class MedicalRecordService {
 
     public MedicalRecord create(MedicalRecordDto dto) {
 	Person linkedPerson;
-	// si la personne est inconnue ou si un dossier medical lié à la même personne existe
+	// si la personne est inconnue ou possède déja un dossier
 	// deja
 	// on retourne null
 	if (personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isEmpty()) {
@@ -59,12 +61,15 @@ public class MedicalRecordService {
 	}
 
 	MedicalRecord newRecord = new MedicalRecord();
-	try {
-	    newRecord.setBirthdate(new SimpleDateFormat("MM/dd/yyyy").parse(dto.getBirthdate()));
-	} catch (ParseException e) {
-	    e.printStackTrace();
-	}
-//	pour chaque allergie du dto, on verifie si existant, si oui on add a newRecord.allergies, sinon on créée 
+	
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	    newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(), formatter));
+	    
+	    // LocalDate today = LocalDate.now();""
+	    // String formattedDate = today.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
+	    // System.out.println(formattedDate);
+
+//	pour chaque allergie du dto, on verifie si existant, si oui on add a newRecord.allergies, sinon on créée avant
 	for (String dtoAllergie : dto.getAllergies()) {
 	    Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
 	    newRecord.getRecordAllergies()
@@ -84,7 +89,9 @@ public class MedicalRecordService {
     }
 
     public Iterable<MedicalRecordDto> createAll(Iterable<MedicalRecordDto> dto) {
-	for (MedicalRecordDto medicalRecord : dto) { create(medicalRecord); }
+	for (MedicalRecordDto medicalRecord : dto) {
+	    create(medicalRecord);
+	}
 	return this.getAll();
     }
 }
