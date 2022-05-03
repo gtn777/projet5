@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.api.dto.endpoints.PersonDto;
+import com.safetynet.api.dto.endpoints.PersonsDto;
 import com.safetynet.api.service.endpoint.PersonService;
 
 @RestController
@@ -31,7 +32,7 @@ public class PersonController {
 
     @PostMapping("/persons/group")
     public Iterable<PersonDto> createPerson(@RequestBody Iterable<PersonDto> personList) {
-	return personService.createAllPerson(personList);
+	return personService.createAllPerson(new PersonsDto());
     }
 
     @PutMapping("/persons")

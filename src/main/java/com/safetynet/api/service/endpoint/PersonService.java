@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.api.dto.endpoints.PersonDto;
+import com.safetynet.api.dto.endpoints.PersonsDto;
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.Person;
@@ -114,11 +115,10 @@ public class PersonService {
 	personRepository.deleteByFirstNameAndLastName(firstName, lastName);
     }
 
-    public Iterable<PersonDto> createAllPerson(Iterable<PersonDto> dto){
-	Set<PersonDto> allPersonSaved = new HashSet<PersonDto>();
-	for(PersonDto personDto: dto) {
-	    PersonDto personSaved = this.createPerson(personDto);
-	    allPersonSaved.add(personSaved);
+    @Transactional
+    public Iterable<PersonDto> createAllPerson(PersonsDto dtos){
+	for(PersonDto personDto: dtos.getPersonDtos()) {
+	    this.createPerson(personDto);
 	}
 	return this.getAll();
     }
