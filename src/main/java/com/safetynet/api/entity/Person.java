@@ -1,6 +1,8 @@
 package com.safetynet.api.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,11 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.safetynet.api.util.DateUtil;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,10 +58,35 @@ public class Person implements Serializable {
     @EqualsAndHashCode.Exclude
     private Home home;
 
-    @OneToOne(mappedBy = "person",targetEntity = MedicalRecord.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    @JsonBackReference
+    @OneToOne(targetEntity = MedicalRecord.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "medical_record_id", referencedColumnName = "id")
+    @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private MedicalRecord medicalRecord;
+
+    public Set<String> getAllergiesSet() {
+	Set<String> allergieSet = new HashSet<String>();
+	if (this.getMedicalRecord() == null)
+	    return allergieSet;
+	for (Allergie a : this.getMedicalRecord().getRecordAllergies()) {
+	    allergieSet.add(a.getAllergieString());
+	}
+	return allergieSet;
+    }
+
+    public Set<String> getMedicationsSet() {
+	Set<String> medicationSet = new HashSet<String>();
+	if (this.getMedicalRecord() == null)
+	    return medicationSet;
+	for (Medication m : this.getMedicalRecord().getRecordMedications()) {
+	    medicationSet.add(m.getMedicationString());
+	}
+	return medicationSet;
+    }
+
+    public Object getAge() {
+	return this.getMedicalRecord() == null ? "unknown"
+		: DateUtil.calculateAgeWithJava7(this.getMedicalRecord().getBirthdate());
+    }
 
 }

@@ -1,11 +1,15 @@
 package com.safetynet.api.service;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.safetynet.api.dto.FloodPersonDto;
+import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
@@ -25,11 +29,16 @@ public class FloodAlertService {
     @Autowired
     HomeRepository homeRepository;
 
-    public Object getFloodAlert(Set<Integer> stations) {	
-	
-	
-	return personRepository.findAllByHomeStation(4);
-	
+    public Object getFloodAlert(Iterable<Integer> stations) {
+	Map<String, Set<FloodPersonDto>> result = new HashMap<String, Set<FloodPersonDto>>();
+	Iterable<Person> personsIterable = personRepository.findAllByHomeStationIn(stations);
+
+	for (Person p : personsIterable) {
+	    String address = p.getHome().getAddress();
+	    if (!result.containsKey(address)) { result.put(address, new HashSet<FloodPersonDto>()); }
+	    result.get(address).add(new FloodPersonDto(p));
+	}
+	return result;
     }
 
 }

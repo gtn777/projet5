@@ -1,7 +1,5 @@
 package com.safetynet.api.service.endpoint;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -50,24 +48,22 @@ public class MedicalRecordService {
 
     public MedicalRecord create(MedicalRecordDto dto) {
 	Person linkedPerson;
-	// si la personne est inconnue ou possède déja un dossier
-	// deja
-	// on retourne null
-	if (personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isEmpty()) {
+	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
+	// si la personne est inconnue on retourne null
+	if (optionalPerson.isEmpty()) {
 	    return null;
 	} else {
-	    linkedPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).get();
-	    if (medicalRecordDAO.findById(linkedPerson.getId()).isPresent()) { return null; }
+	    linkedPerson = optionalPerson.get();
 	}
 
 	MedicalRecord newRecord = new MedicalRecord();
-	
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-	    newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(), formatter));
-	    
-	    // LocalDate today = LocalDate.now();""
-	    // String formattedDate = today.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
-	    // System.out.println(formattedDate);
+
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(), formatter));
+
+	// LocalDate today = LocalDate.now();""
+	// String formattedDate = today.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
+	// System.out.println(formattedDate);
 
 //	pour chaque allergie du dto, on verifie si existant, si oui on add a newRecord.allergies, sinon on créée avant
 	for (String dtoAllergie : dto.getAllergies()) {
@@ -82,10 +78,11 @@ public class MedicalRecordService {
 		    .add(newMedication.isPresent() ? newMedication.get() : medicationDAO.save(new Medication(dtoMedication)));
 	}
 
+	linkedPerson.setMedicalRecord(newRecord);
 	newRecord.setPerson(linkedPerson);
+	personDAO.save(linkedPerson);
 
-	MedicalRecord savedRecord = medicalRecordDAO.save(newRecord);
-	return savedRecord;
+	return linkedPerson.getMedicalRecord();
     }
 
     public Iterable<MedicalRecordDto> createAll(Iterable<MedicalRecordDto> dto) {

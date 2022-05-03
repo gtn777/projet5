@@ -41,6 +41,12 @@ CREATE TABLE medication
    medication_name VARCHAR (250) NOT NULL,
    CONSTRAINT UNIQUE_medication UNIQUE (medication_name)
 );
+DROP TABLE IF EXISTS medical_record;
+CREATE TABLE medical_record
+(
+   id INT AUTO_INCREMENT PRIMARY KEY  NOT NULL,
+   birthdate DATE NOT NULL
+);
 DROP TABLE IF EXISTS person;
 CREATE TABLE person
 (
@@ -50,40 +56,35 @@ CREATE TABLE person
    email_id INT NOT NULL,
    phone_id INT NOT NULL,
    home_id INT NOT NULL,
+   medical_record_id INT,
    FOREIGN KEY (email_id) REFERENCES email (id),
    FOREIGN KEY (phone_id) REFERENCES phone (id),
-   FOREIGN KEY (home_id) REFERENCES home (id)
-);
-DROP TABLE IF EXISTS medical_record;
-CREATE TABLE medical_record
-(
-   person_id INT PRIMARY KEY NOT NULL,
-   birthdate DATE NOT NULL,
-   FOREIGN KEY (person_id) REFERENCES person (id)
+   FOREIGN KEY (home_id) REFERENCES home (id),
+   FOREIGN KEY (medical_record_id) REFERENCES medical_record (id)
 );
 DROP TABLE IF EXISTS record_allergie;
 CREATE TABLE record_allergie
 (
-   record_id INT NOT NULL,
+   medical_record_id INT NOT NULL,
    allergie_id INT NOT NULL,
    PRIMARY KEY
    (
-      record_id,
+      medical_record_id,
       allergie_id
    ),
-   FOREIGN KEY (record_id) REFERENCES medical_record (person_id),
+   FOREIGN KEY (medical_record_id) REFERENCES medical_record (id),
    FOREIGN KEY (allergie_id) REFERENCES allergie (id)
 );
 DROP TABLE IF EXISTS record_medication;
 CREATE TABLE record_medication
 (
-   record_id INT NOT NULL,
+   medical_record_id INT NOT NULL,
    medication_id INT NOT NULL,
    PRIMARY KEY
    (
-      record_id,
+      medical_record_id,
       medication_id
    ),
-   FOREIGN KEY (record_id) REFERENCES medical_record (person_id),
+   FOREIGN KEY (medical_record_id) REFERENCES medical_record (id),
    FOREIGN KEY (medication_id) REFERENCES medication (id)
 );

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.api.dto.FloodAlertDto;
 import com.safetynet.api.dto.PersonInfoDto;
 import com.safetynet.api.dto.PhoneAlertDto;
 import com.safetynet.api.service.CommunityEmailService;
@@ -56,5 +55,7 @@ public class AlertController {
     public Object getFloodAlert(@RequestParam Set<Integer> stations) {
 	return floodAlertService.getFloodAlert(stations);
     }
+    
+    
 
 }
