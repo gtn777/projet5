@@ -48,9 +48,6 @@ public class PersonService {
     }
 
     public PersonDto createPerson(PersonDto dto) {
-//	System.out.println(dto.getFirstName());
-//	System.out.println(dto.getLastName());
-//	System.out.println(this);
 	// Si la personne est déja présente en base on retourne NULL
 	if (personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isPresent()) { return null; }
 	// on crée une npersonne et lui attribue les nouveaux nom et prénom

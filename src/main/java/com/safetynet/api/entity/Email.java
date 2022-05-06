@@ -39,7 +39,7 @@ public class Email implements Serializable {
     @Column(name = "email_address", unique = true)
     private String emailAddress;
 
-    @OneToMany(mappedBy = "email", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "email", targetEntity = Person.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<Person> persons = new HashSet<Person>();

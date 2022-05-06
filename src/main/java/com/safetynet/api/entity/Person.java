@@ -40,25 +40,25 @@ public class Person implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToOne(targetEntity = Email.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Email.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "email_id", referencedColumnName = "id")
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private Email email;
 
-    @ManyToOne(targetEntity = Phone.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Phone.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "phone_id", referencedColumnName = "id")
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private Phone phone;
 
-    @ManyToOne(targetEntity = Home.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Home.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "home_id", referencedColumnName = "id")
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private Home home;
 
-    @OneToOne(targetEntity = MedicalRecord.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = MedicalRecord.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "medical_record_id", referencedColumnName = "id")
     @JsonManagedReference
     @EqualsAndHashCode.Exclude

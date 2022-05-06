@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
@@ -17,12 +20,13 @@ import lombok.Data;
 
 @Data
 @Service
-@Configurable
 public class JsonFileToDatabase {
 
     @Autowired
     private PersonService personService;
 
+    @Transactional
+    @PostConstruct
     public Iterable<PersonDto> readValues() {
 	PersonsDto personsDto = new PersonsDto();
 	ObjectMapper mapper = new ObjectMapper();
