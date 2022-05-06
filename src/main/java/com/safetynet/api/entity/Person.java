@@ -84,8 +84,8 @@ public class Person implements Serializable {
 	return medicationSet;
     }
 
-    public Object getAge() {
-	return this.getMedicalRecord() == null ? "unknown"
+    public int getAge() {
+	return this.getMedicalRecord() == null ? 999
 		: DateUtil.calculateAgeWithJava7(this.getMedicalRecord().getBirthdate());
     }
 

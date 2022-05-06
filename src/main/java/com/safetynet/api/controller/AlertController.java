@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynet.api.dto.ChildAlertDto;
+import com.safetynet.api.dto.FireStationCoverageDto;
 import com.safetynet.api.dto.PersonInfoDto;
 import com.safetynet.api.dto.PhoneAlertDto;
+import com.safetynet.api.service.ChildAlertService;
 import com.safetynet.api.service.CommunityEmailService;
+import com.safetynet.api.service.FireAlertService;
+import com.safetynet.api.service.FireStationCoverageService;
 import com.safetynet.api.service.FloodAlertService;
 import com.safetynet.api.service.PersonInfoService;
 import com.safetynet.api.service.PhoneAlertService;
@@ -29,7 +34,28 @@ public class AlertController {
     @Autowired
     FloodAlertService floodAlertService;
 
-//    http://localhost:9000/phoneAlert?firestation=<firestation_number>
+    @Autowired
+    FireAlertService fireAlertService;
+
+    @Autowired
+    ChildAlertService childAlertService;
+
+    @Autowired
+    FireStationCoverageService fireStationCoverageService;
+
+//    	http://localhost:8080/firestation?stationNumber=<station_number>
+    @GetMapping("/firestation")
+    public FireStationCoverageDto getCoverageDataByStationNumber(@RequestParam int station) {
+	return fireStationCoverageService.getCoverageDataForStation(station);
+    }
+
+//    http://localhost:8080/childAlert?address=<address>
+    @GetMapping("/childAlert")
+    public ChildAlertDto getChildAlert(@RequestParam String address) {
+	return childAlertService.getAlertData(address);
+    }
+
+//    http://localhost:8080/phoneAlert?firestation=<firestation_number>
     @GetMapping("/phoneAlert")
     public PhoneAlertDto getPhoneAlert(@RequestParam int stationNumber) {
 	return phoneAlertService.getAllPhoneByStation(stationNumber);
@@ -48,14 +74,15 @@ public class AlertController {
     }
 
 //    http://localhost:8080/flood/stations?stations=<a list of station_numbers>
-//    Cette url doit retourner une liste de tous les foyers desservis par la caserne. Cette liste doit regrouper les
-//    personnes par adresse. Elle doit aussi inclure le nom, le numéro de téléphone et l'âge des habitants, et
-//    faire figurer leurs antécédents médicaux (médicaments, posologie et allergies) à côté de chaque nom.
     @GetMapping("/flood")
     public Object getFloodAlert(@RequestParam Set<Integer> stations) {
 	return floodAlertService.getFloodAlert(stations);
     }
-    
-    
+
+//    http://localhost:8080/fire?address=<address>
+    @GetMapping("/fire")
+    public Object getFireAlert(@RequestParam String address) {
+	return fireAlertService.getAddressData(address);
+    }
 
 }

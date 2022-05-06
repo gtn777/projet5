@@ -48,10 +48,11 @@ public class PersonService {
     }
 
     public PersonDto createPerson(PersonDto dto) {
+//	System.out.println(dto.getFirstName());
+//	System.out.println(dto.getLastName());
+//	System.out.println(this);
 	// Si la personne est déja présente en base on retourne NULL
-	if (personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isPresent()) {
-	    return null;
-	}
+	if (personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isPresent()) { return null; }
 	// on crée une npersonne et lui attribue les nouveaux nom et prénom
 	Person newPerson = new Person();
 	newPerson.setFirstName(dto.getFirstName());
@@ -105,7 +106,7 @@ public class PersonService {
 		person.setPhone(new Phone(dto.getPhone()));
 	    }
 	}
-	
+
 	return new PersonDto(personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).get());
 
     }
@@ -116,8 +117,15 @@ public class PersonService {
     }
 
     @Transactional
-    public Iterable<PersonDto> createAllPerson(PersonsDto dtos){
-	for(PersonDto personDto: dtos.getPersonDtos()) {
+    public Iterable<PersonDto> createAllPerson(Iterable<PersonDto> personList) {
+	for (PersonDto personDto : personList) {
+	    createPerson(personDto);
+	}
+	return this.getAll();
+    }
+
+    public Iterable<PersonDto> createAllFromJsonFile(PersonsDto personsDto) {
+	for (PersonDto personDto : personsDto.getPersonDtos()) {
 	    this.createPerson(personDto);
 	}
 	return this.getAll();

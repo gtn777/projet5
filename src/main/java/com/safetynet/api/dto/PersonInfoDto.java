@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.safetynet.api.entity.Allergie;
 import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.entity.Medication;

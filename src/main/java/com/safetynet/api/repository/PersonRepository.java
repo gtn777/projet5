@@ -1,6 +1,7 @@
 package com.safetynet.api.repository;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,7 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
     Iterable<Person> findByHomeStation(int station);
 
     Iterable<Person> findAllByHomeStationIn(Iterable<Integer> stations);
+
+    Iterable<Person> findAllByHomeAddress(String address);
 
 }

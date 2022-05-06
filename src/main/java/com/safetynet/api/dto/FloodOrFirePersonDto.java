@@ -9,16 +9,16 @@ import com.safetynet.api.entity.Person;
 import lombok.Data;
 
 @Data
-public class FloodPersonDto implements Serializable {
+public class FloodOrFirePersonDto implements Serializable {
 
     private static final long serialVersionUID = 8639882802901483528L;
 
-    public FloodPersonDto() {}
+    public FloodOrFirePersonDto() {}
 
-    public FloodPersonDto(Person p) {
+    public FloodOrFirePersonDto(Person p) {
 	this.name = p.getFirstName() + " " + p.getLastName();
 	this.phone = p.getPhone().getPhoneNumber();
-	this.age = p.getAge();
+	this.age = p.getAge() == 999 ? "unknown" : p.getAge();
 	this.medications = p.getMedicationsSet();
 	this.allergies = p.getAllergiesSet();
     }

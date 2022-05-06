@@ -8,7 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.api.dto.FloodPersonDto;
+import com.safetynet.api.dto.FloodOrFirePersonDto;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
@@ -30,13 +30,13 @@ public class FloodAlertService {
     HomeRepository homeRepository;
 
     public Object getFloodAlert(Iterable<Integer> stations) {
-	Map<String, Set<FloodPersonDto>> result = new HashMap<String, Set<FloodPersonDto>>();
+	Map<String, Set<FloodOrFirePersonDto>> result = new HashMap<String, Set<FloodOrFirePersonDto>>();
 	Iterable<Person> personsIterable = personRepository.findAllByHomeStationIn(stations);
 
 	for (Person p : personsIterable) {
 	    String address = p.getHome().getAddress();
-	    if (!result.containsKey(address)) { result.put(address, new HashSet<FloodPersonDto>()); }
-	    result.get(address).add(new FloodPersonDto(p));
+	    if (!result.containsKey(address)) { result.put(address, new HashSet<FloodOrFirePersonDto>()); }
+	    result.get(address).add(new FloodOrFirePersonDto(p));
 	}
 	return result;
     }

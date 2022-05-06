@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.Allergie;
 import com.safetynet.api.entity.Email;
-import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.Medication;
 import com.safetynet.api.repository.AllergieRepository;
 import com.safetynet.api.repository.EmailRepository;
@@ -28,7 +26,7 @@ public class OtherController {
 
     @Autowired
     private AllergieRepository allergieRepository;
-    
+
     @Autowired
     private PhoneRepository phoneRepository;
 
@@ -37,9 +35,9 @@ public class OtherController {
 //	return emailRepository.findAll();
 	return otherService.getAllEmail();
     }
-    
+
     @GetMapping("/phone")
-    public Iterable<String> getAllPhoneNumber(){
+    public Iterable<String> getAllPhoneNumber() {
 	return otherService.getAllPhoneNumber();
     }
 

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.api.dto.endpoints.MedicalRecordDto;
-import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.service.endpoint.MedicalRecordService;
 
@@ -16,22 +15,20 @@ public class MedicalRecordController {
 
     @Autowired
     private MedicalRecordService medicalRecordService;
-    
+
     @GetMapping("/medicalRecord")
-    public Iterable<MedicalRecordDto> getAllMedicalRecords(){
+    public Iterable<MedicalRecordDto> getAllMedicalRecords() {
 	return medicalRecordService.getAll();
     }
-    
+
     @PostMapping("/medicalRecord")
     public MedicalRecord createMedicalRecord(@RequestBody MedicalRecordDto dto) {
 	return medicalRecordService.create(dto);
     }
-    
+
     @PostMapping("/medicalRecord/group")
-    public Iterable<MedicalRecordDto> createAllMedicalRecord(@RequestBody Iterable<MedicalRecordDto> dto){
+    public Iterable<MedicalRecordDto> createAllMedicalRecord(@RequestBody Iterable<MedicalRecordDto> dto) {
 	return medicalRecordService.createAll(dto);
     }
-    
-    
-    
+
 }

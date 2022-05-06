@@ -15,10 +15,10 @@ public class FireStationController {
     @Autowired
     private FireStationService fireStationService;
 
-    @GetMapping("/firestation")
-    public Iterable<FireStationDto> readAllFireStations() {
-	return fireStationService.getAll();
-    }
+//    @GetMapping("/firestation")
+//    public Iterable<FireStationDto> readAllFireStations() {
+//	return fireStationService.getAll();
+//    }
 
     @PostMapping("/firestation")
     public FireStationDto create(@RequestBody FireStationDto dto) {

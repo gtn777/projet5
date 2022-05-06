@@ -1,15 +1,9 @@
 package com.safetynet.api.dto.endpoints;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
 
 import com.safetynet.api.entity.Allergie;
 import com.safetynet.api.entity.MedicalRecord;
