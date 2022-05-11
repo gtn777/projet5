@@ -26,8 +26,7 @@ public class Phone implements Serializable {
 
     private static final long serialVersionUID = 4365254477438239553L;
 
-    public Phone() {
-    }
+    public Phone() {}
 
     public Phone(String phoneNumberString) {
 	this.phoneNumber = phoneNumberString;
@@ -40,7 +39,7 @@ public class Phone implements Serializable {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "phone", targetEntity = Person.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "phone", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<Person> persons = new HashSet<Person>();

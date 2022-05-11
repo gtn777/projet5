@@ -6,9 +6,13 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynet.api.dto.endpoints.FireStationDto;
+import com.safetynet.api.dto.endpoints.JsonFileMedicalrecordsDto;
 import com.safetynet.api.dto.endpoints.MedicalRecordDto;
 import com.safetynet.api.entity.Allergie;
 import com.safetynet.api.entity.MedicalRecord;
@@ -46,6 +50,7 @@ public class MedicalRecordService {
 	return dto;
     }
 
+    @Transactional
     public MedicalRecord create(MedicalRecordDto dto) {
 	Person linkedPerson;
 	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
@@ -85,10 +90,21 @@ public class MedicalRecordService {
 	return linkedPerson.getMedicalRecord();
     }
 
+    @Transactional
     public Iterable<MedicalRecordDto> createAll(Iterable<MedicalRecordDto> dto) {
+	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
 	for (MedicalRecordDto medicalRecord : dto) {
 	    create(medicalRecord);
 	}
 	return this.getAll();
     }
+
+    @Transactional
+    public Iterable<MedicalRecordDto> createAllFromJsonFile(JsonFileMedicalrecordsDto dto) {
+	for (MedicalRecordDto medicalRecord : dto.getMedicalRecordDtos()) {
+	    create(medicalRecord);
+	}
+	return this.getAll();
+    }
+
 }

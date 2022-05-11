@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PersonsDto implements Serializable {
+public class JsonFilePersonsDto implements Serializable {
 
     private static final long serialVersionUID = 4699801137029008254L;
 

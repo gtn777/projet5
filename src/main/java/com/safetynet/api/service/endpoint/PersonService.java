@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.api.dto.endpoints.PersonDto;
-import com.safetynet.api.dto.endpoints.PersonsDto;
+import com.safetynet.api.dto.endpoints.JsonFilePersonsDto;
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.Person;
@@ -47,6 +47,7 @@ public class PersonService {
 	return personsDto;
     }
 
+    @Transactional
     public PersonDto createPerson(PersonDto dto) {
 	// Si la personne est déja présente en base on retourne NULL
 	if (personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isPresent()) { return null; }
@@ -56,7 +57,7 @@ public class PersonService {
 	newPerson.setLastName(dto.getLastName());
 
 	// on check si le phone est connu, si oui on l'attribue a person, ou alors on
-	// crée et enregistre un nouveau numéero
+	// crée et enregistre un nouveau numéro
 	Optional<Phone> phoneOptional = phoneRepository.findByPhoneNumber(dto.getPhone());
 	if (phoneOptional.isPresent()) {
 	    newPerson.setPhone(phoneOptional.get());
@@ -121,7 +122,7 @@ public class PersonService {
 	return this.getAll();
     }
 
-    public Iterable<PersonDto> createAllFromJsonFile(PersonsDto personsDto) {
+    public Iterable<PersonDto> createAllFromJsonFile(JsonFilePersonsDto personsDto) {
 	for (PersonDto personDto : personsDto.getPersonDtos()) {
 	    this.createPerson(personDto);
 	}

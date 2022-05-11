@@ -3,8 +3,6 @@ package com.safetynet.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.safetynet.api.util.JsonFileToDatabase;
-
 @SpringBootApplication
 public class ApiApplication {
 

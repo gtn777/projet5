@@ -47,7 +47,7 @@ public class Home implements Serializable {
     @Column
     private String zip;
 
-    @OneToMany(mappedBy = "home", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "home", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<Person> persons = new HashSet<Person>();

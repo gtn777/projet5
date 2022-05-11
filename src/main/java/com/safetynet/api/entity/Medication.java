@@ -39,7 +39,7 @@ public class Medication implements Serializable {
     @Column(name = "medication_name", unique = true)
     private String medicationString;
 
-    @ManyToMany(mappedBy = "recordMedications", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "recordMedications", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<MedicalRecord> medicationRecords = new HashSet<MedicalRecord>();

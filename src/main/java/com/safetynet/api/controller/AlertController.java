@@ -57,8 +57,8 @@ public class AlertController {
 
 //    http://localhost:8080/phoneAlert?firestation=<firestation_number>
     @GetMapping("/phoneAlert")
-    public PhoneAlertDto getPhoneAlert(@RequestParam int stationNumber) {
-	return phoneAlertService.getAllPhoneByStation(stationNumber);
+    public PhoneAlertDto getPhoneAlert(@RequestParam int firestation) {
+	return phoneAlertService.getAllPhoneByStation(firestation);
     }
 
 //    http://localhost:8080/communityEmail?city=<city>

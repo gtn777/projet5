@@ -27,7 +27,7 @@ public class Allergie implements Serializable {
     public Allergie() {
 	super();
     }
-    
+
     public Allergie(String newAllergieString) {
 	super();
 	this.allergieString = newAllergieString;
@@ -42,7 +42,7 @@ public class Allergie implements Serializable {
     @Column(name = "allergie_name", unique = true)
     private String allergieString;
 
-    @ManyToMany(mappedBy = "recordAllergies", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "recordAllergies", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonBackReference
     @EqualsAndHashCode.Exclude
     private Set<MedicalRecord> allergieRecords = new HashSet<MedicalRecord>();

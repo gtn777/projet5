@@ -33,7 +33,7 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(mappedBy = "medicalRecord", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "medicalRecord", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @EqualsAndHashCode.Exclude
     @JsonBackReference
     private Person person;
@@ -41,13 +41,13 @@ public class MedicalRecord {
     @Column(name = "birthdate")
     private LocalDate birthdate;
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Allergie.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "medical_record_allergie", joinColumns = @JoinColumn(name = "medical_record_id"), inverseJoinColumns = @JoinColumn(name = "allergie_id"))
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     Set<Allergie> recordAllergies = new HashSet<Allergie>();
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Medication.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "medical_record_medication", joinColumns = @JoinColumn(name = "medical_record_id"), inverseJoinColumns = @JoinColumn(name = "medication_id"))
     @JsonManagedReference
     @EqualsAndHashCode.Exclude

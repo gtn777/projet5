@@ -4,10 +4,15 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.api.dto.endpoints.FireStationDto;
+import com.safetynet.api.dto.endpoints.JsonFileFirestationsDto;
+import com.safetynet.api.dto.endpoints.JsonFilePersonsDto;
+import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.repository.HomeRepository;
 
@@ -28,6 +33,7 @@ public class FireStationService {
 	return dtos;
     }
 
+    @Transactional
     public FireStationDto addOne(FireStationDto dto) {
 	Optional<Home> homeOptional = homeDAO.findByAddress(dto.getAddress());
 	if (homeOptional.isEmpty()) {
@@ -45,6 +51,7 @@ public class FireStationService {
 
     }
 
+    @Transactional
     public Iterable<FireStationDto> addAll(Iterable<FireStationDto> dto) {
 	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
 	for (FireStationDto fireStationDto : dto) {
@@ -52,4 +59,14 @@ public class FireStationService {
 	}
 	return returnValue;
     }
+
+    @Transactional
+    public Iterable<FireStationDto> createAllFromJsonFile(JsonFileFirestationsDto dto) {
+	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
+	for (FireStationDto fireStationDto : dto.getFireStationDtos()) {
+	    returnValue.add(addOne(fireStationDto));
+	}
+	return returnValue;
+    }
+
 }
