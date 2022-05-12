@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.api.dto.endpoints.FireStationDto;
 import com.safetynet.api.dto.endpoints.JsonFileMedicalrecordsDto;
 import com.safetynet.api.dto.endpoints.MedicalRecordDto;
 import com.safetynet.api.entity.Allergie;
@@ -92,7 +91,6 @@ public class MedicalRecordService {
 
     @Transactional
     public Iterable<MedicalRecordDto> createAll(Iterable<MedicalRecordDto> dto) {
-	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
 	for (MedicalRecordDto medicalRecord : dto) {
 	    create(medicalRecord);
 	}

@@ -54,6 +54,10 @@ public class AlertControllerTest {
     public void testGetStationCoverageData() throws Exception {
 	mockMvc.perform(get("/firestation?station=3")).andExpect(status().isOk());
     }
+    @Test
+    public void testGetStationCoverageDataNotFound() throws Exception {
+	mockMvc.perform(get("/firestation?station=99")).andExpect(status().isNotFound());
+    }
 
     @Test
     public void testGetChildAlert() throws Exception {

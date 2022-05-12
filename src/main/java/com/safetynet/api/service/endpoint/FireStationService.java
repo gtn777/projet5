@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.safetynet.api.dto.endpoints.FireStationDto;
 import com.safetynet.api.dto.endpoints.JsonFileFirestationsDto;
-import com.safetynet.api.dto.endpoints.JsonFilePersonsDto;
-import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.repository.HomeRepository;
 
