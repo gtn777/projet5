@@ -14,6 +14,10 @@ public interface HomeRepository extends CrudRepository<Home, Integer> {
 
     public Optional<Home> findByAddress(String address);
 
-    public Iterable<Home> findAllByStation(int station);
+    public Iterable<Home> findAllByStation(int station);    
+
+    boolean existsByStationIn(Iterable<Integer> stations);
+
+    boolean existsByStation(int station);
 
 }

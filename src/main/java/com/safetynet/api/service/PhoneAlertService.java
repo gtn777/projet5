@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.api.dto.PhoneAlertDto;
+import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.repository.PhoneRepository;
+import com.safetynet.api.service.exception.UnknownFireStationException;
 
 import lombok.Data;
 
@@ -20,6 +22,11 @@ public class PhoneAlertService {
     private PhoneRepository phoneRepository;
 
     public PhoneAlertDto getAllPhoneByStation(int stationNumber) {
-	return new PhoneAlertDto(personRepository.findAllByHomeStation(stationNumber));
+	Iterable<Person> persons = personRepository.findAllByHomeStation(stationNumber);
+	if (persons != null && persons.iterator().hasNext()) {
+	    return new PhoneAlertDto();
+	} else {
+	    throw new UnknownFireStationException(stationNumber);
+	}
     }
 }

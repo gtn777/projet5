@@ -8,11 +8,12 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.api.dto.FloodOrFirePersonDto;
+import com.safetynet.api.dto.FloodOrFireAlertPersonDto;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
+import com.safetynet.api.service.exception.UnknownFireStationException;
 
 import lombok.Data;
 
@@ -27,18 +28,27 @@ public class FloodAlertService {
     private MedicalRecordRepository medicalRecordRepository;
 
     @Autowired
-    HomeRepository homeRepository;
+    private HomeRepository homeRepository;
 
     public Object getFloodAlert(Iterable<Integer> stations) {
-	Map<String, Set<FloodOrFirePersonDto>> result = new HashMap<String, Set<FloodOrFirePersonDto>>();
-	Iterable<Person> personsIterable = personRepository.findAllByHomeStationIn(stations);
-
-	for (Person p : personsIterable) {
-	    String address = p.getHome().getAddress();
-	    if (!result.containsKey(address)) { result.put(address, new HashSet<FloodOrFirePersonDto>()); }
-	    result.get(address).add(new FloodOrFirePersonDto(p));
+	// if a station is unknown in database throw new exception
+	for (Integer station : stations) {
+	    if (!homeRepository.existsByStation(station))
+		throw new UnknownFireStationException(station);
 	}
-	return result;
+	
+	Map<String, Set<FloodOrFireAlertPersonDto>> result = new HashMap<String, Set<FloodOrFireAlertPersonDto>>();
+	Iterable<Person> personsIterable = personRepository.findAllByHomeStationIn(stations);
+	if (personsIterable != null && personsIterable.iterator().hasNext()) {
+	    for (Person p : personsIterable) {
+		String address = p.getHome().getAddress();
+		if (!result.containsKey(address)) { result.put(address, new HashSet<FloodOrFireAlertPersonDto>()); }
+		result.get(address).add(new FloodOrFireAlertPersonDto(p));
+	    }
+	    return result;
+	} else {
+	    throw new UnknownFireStationException(stations);
+	}
     }
 
 }

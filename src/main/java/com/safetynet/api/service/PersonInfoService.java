@@ -19,17 +19,17 @@ public class PersonInfoService {
 
     @Autowired
     private PersonRepository personRepository;
-    
+
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
-    
+
     public Iterable<PersonInfoDto> getPersonInfo(String firstName, String lastName) {
 	Set<PersonInfoDto> dtos = new HashSet<PersonInfoDto>();
-	for(Person p: personRepository.findAllByFirstNameAndLastName(firstName, lastName)) {
+	for (Person p : personRepository.findAllByFirstNameAndLastName(firstName, lastName)) {
 	    dtos.add(new PersonInfoDto(p, medicalRecordRepository.findByPersonFirstNameAndPersonLastName(firstName, lastName)));
 	}
 	return dtos;
-	
+
     }
-    
+
 }

@@ -8,23 +8,28 @@ import org.springframework.stereotype.Service;
 
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.repository.EmailRepository;
+import com.safetynet.api.service.exception.UnknownCityException;
 
 import lombok.Data;
 
 @Data
 @Service
 public class CommunityEmailService {
-    // http://localhost:8080/communityEmail?city=<city>
+
     @Autowired
     private EmailRepository emailRepository;
 
-    public Iterable<String> getMailByCity(String city) {
+    public Iterable<String> getMailByCity(String city) {	
 	Set<String> returnList = new HashSet<String>();
 	Iterable<Email> emailIterable = emailRepository.findAllByPersonsHomeCity(city);
-	for (Email email : emailIterable) {
-	    returnList.add(email.getEmailAddress());
+	if (emailIterable != null && emailIterable.iterator().hasNext()) {
+	    for (Email email : emailIterable) {
+		returnList.add(email.getEmailAddress());
+	    }
+	    return returnList;
+	} else {
+	    throw new UnknownCityException(city);
 	}
-	return returnList;
     }
 
 }

@@ -9,13 +9,13 @@ import com.safetynet.api.entity.Person;
 import lombok.Data;
 
 @Data
-public class FloodOrFirePersonDto implements Serializable {
+public class FloodOrFireAlertPersonDto implements Serializable {
 
     private static final long serialVersionUID = 8639882802901483528L;
 
-    public FloodOrFirePersonDto() {}
+    public FloodOrFireAlertPersonDto() {}
 
-    public FloodOrFirePersonDto(Person p) {
+    public FloodOrFireAlertPersonDto(Person p) {
 	this.name = p.getFirstName() + " " + p.getLastName();
 	this.phone = p.getPhone().getPhoneNumber();
 	this.age = p.getAge() == 999 ? "unknown" : p.getAge();

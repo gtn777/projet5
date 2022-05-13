@@ -19,7 +19,7 @@ public class FireAlertDto implements Serializable {
 	this.address = address;
 	this.station = station;
 	for (Person p : persons) {
-	    this.persons.add(new FloodOrFirePersonDto(p));
+	    this.persons.add(new FloodOrFireAlertPersonDto(p));
 	}
     }
 
@@ -27,6 +27,6 @@ public class FireAlertDto implements Serializable {
 
     private int station;
 
-    private Set<FloodOrFirePersonDto> persons = new HashSet<FloodOrFirePersonDto>();
+    private Set<FloodOrFireAlertPersonDto> persons = new HashSet<FloodOrFireAlertPersonDto>();
 
 }

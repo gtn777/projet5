@@ -11,8 +11,6 @@ import com.safetynet.api.entity.Allergie;
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.entity.Medication;
 import com.safetynet.api.repository.AllergieRepository;
-import com.safetynet.api.repository.EmailRepository;
-import com.safetynet.api.repository.PhoneRepository;
 import com.safetynet.api.service.OtherService;
 
 @RestController
@@ -22,13 +20,7 @@ public class OtherController {
     private OtherService otherService;
 
     @Autowired
-    private EmailRepository emailRepository;
-
-    @Autowired
     private AllergieRepository allergieRepository;
-
-    @Autowired
-    private PhoneRepository phoneRepository;
 
     @GetMapping("/emails")
     public Iterable<String> getAllEmails() {
@@ -66,8 +58,4 @@ public class OtherController {
 	return allergieRepository.save(new Allergie(newAllergieString));
     }
 
-//    @GetMapping("/home")
-//    public Iterable<Home> getAllHome(@RequestParam String dto) {
-//	return otherService.getAllHomeByStationName(dto);
-//    }
 }
