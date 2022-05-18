@@ -19,7 +19,7 @@ public class CommunityEmailService {
     @Autowired
     private EmailRepository emailRepository;
 
-    public Iterable<String> getMailByCity(String city) {	
+    public Iterable<String> getData(String city) {	
 	Set<String> returnList = new HashSet<String>();
 	Iterable<Email> emailIterable = emailRepository.findAllByPersonsHomeCity(city);
 	if (emailIterable != null && emailIterable.iterator().hasNext()) {

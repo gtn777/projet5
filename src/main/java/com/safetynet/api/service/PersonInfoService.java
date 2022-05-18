@@ -10,6 +10,7 @@ import com.safetynet.api.dto.PersonInfoDto;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
+import com.safetynet.api.service.exception.UnknownPersonException;
 
 import lombok.Data;
 
@@ -24,11 +25,17 @@ public class PersonInfoService {
     private MedicalRecordRepository medicalRecordRepository;
 
     public Iterable<PersonInfoDto> getPersonInfo(String firstName, String lastName) {
+	
 	Set<PersonInfoDto> dtos = new HashSet<PersonInfoDto>();
-	for (Person p : personRepository.findAllByFirstNameAndLastName(firstName, lastName)) {
-	    dtos.add(new PersonInfoDto(p, medicalRecordRepository.findByPersonFirstNameAndPersonLastName(firstName, lastName)));
+	Iterable<Person> persons = personRepository.findAllByFirstNameAndLastName(firstName, lastName);
+	if(persons != null && persons.iterator().hasNext()) {
+	    for (Person person : persons) {
+		dtos.add(new PersonInfoDto(person, medicalRecordRepository.findByPersonFirstNameAndPersonLastName(firstName, lastName)));
+	    }
+	    return dtos;
+	}else {
+	    throw new UnknownPersonException(firstName, lastName);
 	}
-	return dtos;
 
     }
 

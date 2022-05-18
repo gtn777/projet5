@@ -24,6 +24,7 @@ public class PersonInfoDto implements Serializable {
 	this.lastName = p.getLastName();
 	this.address = p.getHome().getAddress();
 	this.age = DateUtil.calculateAgeWithJava7(mr.getBirthdate());
+	this.email = p.getEmail().getEmailAddress();
 	for (Medication m : mr.getRecordMedications()) {
 	    this.medications.add(m.getMedicationString());
 	}
@@ -36,6 +37,7 @@ public class PersonInfoDto implements Serializable {
     private String lastName;
     private String address;
     private int age;
+    private String email;
     private Set<String> medications = new HashSet<String>();
     private Set<String> allergies = new HashSet<String>();
 

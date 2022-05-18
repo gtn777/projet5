@@ -1,3 +1,4 @@
+
 package com.safetynet.api.entity;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 
 @Data
 @Entity
@@ -54,5 +56,7 @@ public class Home implements Serializable {
 
     @Column(name = "fire_station", nullable = true)
     private int station;
+
+    public void setStation(int s) { this.station = s; }
 
 }

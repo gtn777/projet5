@@ -43,7 +43,7 @@ public class JsonFileToDatabaseUtil {
 	    personsDto = mapper.readValue(new File("src/main/resources/data.json"), JsonFilePersonsDto.class);
 	    personService.createAllFromJsonFile(personsDto);
 	    firestationsDto = mapper.readValue(new File("src/main/resources/data.json"), JsonFileFirestationsDto.class);
-	    fireStationService.createAllFromJsonFile(firestationsDto);
+	    fireStationService.createAllFromJson(firestationsDto);
 	    medicalrecordsDto = mapper.readValue(new File("src/main/resources/data.json"), JsonFileMedicalrecordsDto.class);
 	    medicalRecordService.createAllFromJsonFile(medicalrecordsDto);
 

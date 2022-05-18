@@ -9,7 +9,6 @@ public class FireStationDto implements Serializable {
 
     private static final long serialVersionUID = 4330804786615586960L;
 
-    public FireStationDto() {}
 
     public FireStationDto(String a, int s) {
 	this.address = a;

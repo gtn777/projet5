@@ -11,24 +11,27 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AlertControllerIT {
-
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testGetStationCoverageData() throws Exception {
-	mockMvc.perform(get("/firestation?station=3")).andExpect(status().isOk())
+	mockMvc.perform(get("/firestation?station=3"))
+		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.persons[0].firstName", is("Roger")))
 		.andExpect(jsonPath("$.persons[7].phone", is("841-874-6512")));
     }
 
     @Test
     public void testGetChildAlert() throws Exception {
-	mockMvc.perform(get("/childAlert?address=\"892 Downing Ct\"")).andExpect(status().isOk())
-		.andExpect(jsonPath("$.children[0].firstName", is("Zach"))).andExpect(jsonPath("$.children[0].age", is("5")));
+	mockMvc.perform(get("/childAlert?address=892 Downing Ct"))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.children[0].firstName", is("Zach")))
+		.andExpect(jsonPath("$.children[0].age", is(5)));
     }
 
     @Test
@@ -55,5 +58,4 @@ public class AlertControllerIT {
     public void testGetFireAlert() throws Exception {
 	mockMvc.perform(get("/fire?address=1509 Culver St")).andExpect(status().isOk());
     }
-
 }

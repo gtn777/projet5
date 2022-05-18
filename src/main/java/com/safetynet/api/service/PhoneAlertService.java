@@ -21,7 +21,7 @@ public class PhoneAlertService {
     @Autowired
     private PhoneRepository phoneRepository;
 
-    public PhoneAlertDto getAllPhoneByStation(int stationNumber) {
+    public PhoneAlertDto getData(int stationNumber) {
 	Iterable<Person> persons = personRepository.findAllByHomeStation(stationNumber);
 	if (persons != null && persons.iterator().hasNext()) {
 	    return new PhoneAlertDto();

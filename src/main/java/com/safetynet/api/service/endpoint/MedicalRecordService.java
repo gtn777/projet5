@@ -21,6 +21,7 @@ import com.safetynet.api.repository.AllergieRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.MedicationRepository;
 import com.safetynet.api.repository.PersonRepository;
+import com.safetynet.api.service.exception.UnknownPersonException;
 
 import lombok.Data;
 
@@ -53,23 +54,15 @@ public class MedicalRecordService {
     public MedicalRecord create(MedicalRecordDto dto) {
 	Person linkedPerson;
 	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
-	// si la personne est inconnue on retourne null
 	if (optionalPerson.isEmpty()) {
-	    return null;
+	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
 	} else {
 	    linkedPerson = optionalPerson.get();
 	}
 
 	MedicalRecord newRecord = new MedicalRecord();
+	newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-	newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(), formatter));
-
-	// LocalDate today = LocalDate.now();""
-	// String formattedDate = today.format(DateTimeFormatter.ofPattern("dd-MMM-yy"));
-	// System.out.println(formattedDate);
-
-//	pour chaque allergie du dto, on verifie si existant, si oui on add a newRecord.allergies, sinon on créée avant
 	for (String dtoAllergie : dto.getAllergies()) {
 	    Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
 	    newRecord.getRecordAllergies()
@@ -85,16 +78,44 @@ public class MedicalRecordService {
 	linkedPerson.setMedicalRecord(newRecord);
 	newRecord.setPerson(linkedPerson);
 	personDAO.save(linkedPerson);
-
 	return linkedPerson.getMedicalRecord();
     }
 
-    @Transactional
-    public Iterable<MedicalRecordDto> createAll(Iterable<MedicalRecordDto> dto) {
-	for (MedicalRecordDto medicalRecord : dto) {
-	    create(medicalRecord);
+    public MedicalRecordDto update(MedicalRecordDto dto) {
+	Person linkedPerson;
+	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
+	
+	if (optionalPerson.isEmpty()) {
+	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
+	} else {
+	    linkedPerson = optionalPerson.get();
 	}
-	return this.getAll();
+	
+	for (String dtoAllergie : dto.getAllergies()) {
+	    if (!linkedPerson.getAllergiesSet().contains(dtoAllergie)) {
+		Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
+		linkedPerson.getMedicalRecord()
+			.getRecordAllergies()
+			.add(allergieOptional.isPresent() ? allergieOptional.get() : allergieDAO.save(new Allergie(dtoAllergie)));
+	    }
+	}
+	
+	for (String dtoMedication : dto.getMedications()) {
+	    if (!linkedPerson.getMedicationsSet().contains(dtoMedication)) {
+		Optional<Medication> medicationOptional = medicationDAO.findByMedicationString(dtoMedication);
+		linkedPerson.getMedicalRecord()
+			.getRecordMedications()
+			.add(medicationOptional.isPresent() ? medicationOptional.get()
+				: medicationDAO.save(new Medication(dtoMedication)));
+	    }
+	}
+	
+	personDAO.save(linkedPerson);
+	return new MedicalRecordDto(linkedPerson.getMedicalRecord());
+    }
+
+    public MedicalRecordDto delete(MedicalRecordDto dto) {
+	return null;
     }
 
     @Transactional

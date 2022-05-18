@@ -19,5 +19,5 @@ public interface HomeRepository extends CrudRepository<Home, Integer> {
     boolean existsByStationIn(Iterable<Integer> stations);
 
     boolean existsByStation(int station);
-
+    
 }

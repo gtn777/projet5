@@ -21,7 +21,7 @@ public class FireStationCoverageService {
     @Autowired
     private HomeRepository homeRepository;
 
-    public FireStationCoverageDto getCoverageDataForStation(int station) {
+    public FireStationCoverageDto getData(int station) {
 
 	Iterable<Person> findAllByHomeStation = personRepository.findAllByHomeStation(station);
 	if ((findAllByHomeStation != null) && (findAllByHomeStation.iterator().hasNext())) {
