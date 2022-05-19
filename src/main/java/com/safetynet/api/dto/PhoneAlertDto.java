@@ -17,11 +17,11 @@ public class PhoneAlertDto implements Serializable {
     public PhoneAlertDto() {}
 
     public PhoneAlertDto(Iterable<Person> persons) {
-	Set<String> s = new HashSet<String>();
+	Set<String> stringSet = new HashSet<String>();
 	for (Person p : persons) {
-	    s.add(p.getPhone().getPhoneNumber());
+	    stringSet.add(p.getPhone().getPhoneNumber());
 	}
-	this.phoneAlert = s;
+	this.phoneAlert = stringSet;
     }
 
     private Iterable<String> phoneAlert;

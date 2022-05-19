@@ -47,7 +47,7 @@ public class FireStationService {
     public Iterable<FireStationDto> createAllFromJson(JsonFileFirestationsDto jsonFileFirestationsDto) {
 	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
 	for (FireStationDto fireStationDto : jsonFileFirestationsDto.getFireStationDtos()) {
-	    returnValue.add(create(fireStationDto));
+	    returnValue.add(this.create(fireStationDto));
 	}
 	return returnValue;
     }

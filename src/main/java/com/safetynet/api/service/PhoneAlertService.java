@@ -24,7 +24,7 @@ public class PhoneAlertService {
     public PhoneAlertDto getData(int stationNumber) {
 	Iterable<Person> persons = personRepository.findAllByHomeStation(stationNumber);
 	if (persons != null && persons.iterator().hasNext()) {
-	    return new PhoneAlertDto();
+	    return new PhoneAlertDto(persons);
 	} else {
 	    throw new UnknownFireStationException(stationNumber);
 	}
