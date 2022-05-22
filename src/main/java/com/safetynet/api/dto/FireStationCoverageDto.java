@@ -1,3 +1,4 @@
+
 package com.safetynet.api.dto;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import com.safetynet.api.entity.Person;
 
 import lombok.Data;
 
+
 @Data
 public class FireStationCoverageDto implements Serializable {
 
@@ -17,9 +19,7 @@ public class FireStationCoverageDto implements Serializable {
 
     public FireStationCoverageDto(Iterable<Person> persons) {
 	for (Person p : persons) {
-	    if (p.getAge() == 999) {
-		this.unknownAge++;
-	    } else if (p.getAge() <= 18) {
+	    if (p.getAge() <= 18) {
 		this.children++;
 	    } else {
 		this.adults++;
@@ -29,11 +29,9 @@ public class FireStationCoverageDto implements Serializable {
     }
 
     private Set<FireStationCoveragePersonDto> persons = new HashSet<FireStationCoveragePersonDto>();
-    
+
     private int adults = 0;
 
     private int children = 0;
-
-    private int unknownAge = 0;
 
 }

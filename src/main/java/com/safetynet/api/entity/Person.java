@@ -1,3 +1,4 @@
+
 package com.safetynet.api.entity;
 
 import java.io.Serializable;
@@ -22,12 +23,20 @@ import com.safetynet.api.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 @Data
 @Entity
 @Table(name = "person")
 public class Person implements Serializable {
 
     private static final long serialVersionUID = -1002856601378791502L;
+
+    public Person() {}
+
+    public Person(String firstName, String lastName) {
+	this.firstName = firstName;
+	this.lastName = lastName;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,7 +94,8 @@ public class Person implements Serializable {
     }
 
     public int getAge() {
-	return this.getMedicalRecord() == null ? 999 : DateUtil.calculateAgeWithJava7(this.getMedicalRecord().getBirthdate());
+	return this.getMedicalRecord() == null ? 999
+		: DateUtil.calculateAgeWithJava7(this.getMedicalRecord().getBirthdate());
     }
 
 }

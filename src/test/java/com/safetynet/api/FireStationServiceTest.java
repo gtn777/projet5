@@ -1,17 +1,13 @@
 
 package com.safetynet.api;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,9 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.api.dto.endpoints.FireStationDto;
-import com.safetynet.api.dto.endpoints.JsonFileFirestationsDto;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.service.endpoint.FireStationService;
@@ -128,26 +122,6 @@ public class FireStationServiceTest {
 	verify(homeRepository, Mockito.times(1)).findByAddress(address);
 	verify(homeRepository, Mockito.times(0)).save(Mockito.any());
 	assertTrue(exception.getMessage().contains("No data available"));
-    }
-
-    @Test
-    public void createAllFromJsonTest() {
-	// GIVEN
-	JsonFileFirestationsDto firestationsDto = new JsonFileFirestationsDto();
-	ObjectMapper mapper = new ObjectMapper();
-	try {
-	    firestationsDto = mapper.readValue(new File("src/main/resources/data.json"),
-		    JsonFileFirestationsDto.class);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-	// WHEN
-	Iterable<FireStationDto> result = fireStationService
-		.createAllFromJson(firestationsDto);
-	// THEN
-	assertThat(result).isInstanceOf(Set.class);
-	
-	
     }
 
 }

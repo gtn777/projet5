@@ -1,3 +1,4 @@
+
 package com.safetynet.api.dto;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import com.safetynet.api.entity.Person;
 
 import lombok.Data;
 
+
 @Data
 public class ChildAlertDto implements Serializable {
 
@@ -19,9 +21,7 @@ public class ChildAlertDto implements Serializable {
 
     public ChildAlertDto(Iterable<Person> persons) {
 	for (Person p : persons) {
-	    if (p.getAge() == 999) {
-		this.unknownAge.add(p.getFirstName() + " " + p.getLastName());
-	    } else if (p.getAge() <= 18) {
+	    if (p.getAge() <= 18) {
 		Map<String, Object> child = new HashMap<String, Object>();
 		child.put("firstName", p.getFirstName());
 		child.put("lastName", p.getLastName());
@@ -36,7 +36,5 @@ public class ChildAlertDto implements Serializable {
     private Set<Map<String, Object>> children = new HashSet<Map<String, Object>>();
 
     private Set<String> adults = new HashSet<String>();
-
-    private Set<String> unknownAge = new HashSet<String>();
 
 }

@@ -1,3 +1,4 @@
+
 package com.safetynet.api.dto;
 
 import java.io.Serializable;
@@ -7,6 +8,7 @@ import java.util.Set;
 import com.safetynet.api.entity.Person;
 
 import lombok.Data;
+
 
 @Data
 public class FloodOrFireAlertPersonDto implements Serializable {
@@ -18,16 +20,16 @@ public class FloodOrFireAlertPersonDto implements Serializable {
     public FloodOrFireAlertPersonDto(Person p) {
 	this.name = p.getFirstName() + " " + p.getLastName();
 	this.phone = p.getPhone().getPhoneNumber();
-	this.age = p.getAge() == 999 ? "unknown" : p.getAge();
+	this.age = p.getAge();
 	this.medications = p.getMedicationsSet();
 	this.allergies = p.getAllergiesSet();
     }
 
     private String name;
 
-    private String phone;
+    private String phone = "";
 
-    private Object age;
+    private Object age = -1;
 
     Set<String> medications = new HashSet<String>();
 

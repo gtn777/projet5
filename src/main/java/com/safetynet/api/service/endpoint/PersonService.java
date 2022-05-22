@@ -1,3 +1,4 @@
+
 package com.safetynet.api.service.endpoint;
 
 import java.util.HashSet;
@@ -9,8 +10,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.dto.endpoints.JsonFilePersonsDto;
+import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.Person;
@@ -20,9 +21,7 @@ import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.repository.PhoneRepository;
 
-import lombok.Data;
 
-@Data
 @Service
 public class PersonService {
 
@@ -50,12 +49,15 @@ public class PersonService {
     @Transactional
     public PersonDto createPerson(PersonDto dto) {
 	// Si la personne est déja présente en base on retourne NULL
-	if (personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isPresent()) { return null; }
+	if (personRepository
+		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName())
+		.isPresent()) {
+	    return null;
+	}
 	// on crée une npersonne et lui attribue les nouveaux nom et prénom
 	Person newPerson = new Person();
 	newPerson.setFirstName(dto.getFirstName());
 	newPerson.setLastName(dto.getLastName());
-
 	// on check si le phone est connu, si oui on l'attribue a person, ou alors on
 	// crée et enregistre un nouveau numéro
 	Optional<Phone> phoneOptional = phoneRepository.findByPhoneNumber(dto.getPhone());
@@ -64,15 +66,15 @@ public class PersonService {
 	} else {
 	    newPerson.setPhone(phoneRepository.save(new Phone(dto.getPhone())));
 	}
-
-	Optional<Email> emailOptional = emailRepository.findByEmailAddress(dto.getEmail());
+	Optional<Email> emailOptional = emailRepository
+		.findByEmailAddress(dto.getEmail());
 	if (emailOptional.isPresent()) {
 	    newPerson.setEmail(emailOptional.get());
 	} else {
 	    newPerson.setEmail(emailRepository.save(new Email(dto.getEmail())));
 	}
-
-	Optional<Home> homeOptional = homeRepository.findByAddressAndCity(dto.getAddress(), dto.getCity());
+	Optional<Home> homeOptional = homeRepository
+		.findByAddressAndCity(dto.getAddress(), dto.getCity());
 	if (homeOptional.isPresent()) {
 	    newPerson.setHome(homeOptional.get());
 	} else {
@@ -84,11 +86,12 @@ public class PersonService {
 
     @Transactional
     public PersonDto updatePerson(PersonDto dto) {
-
-	Person person = personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).get();
-
+	Person person = personRepository
+		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName())
+		.get();
 	if (dto.getEmail() != person.getEmail().getEmailAddress()) {
-	    Optional<Email> emailOptional = emailRepository.findByEmailAddress(dto.getEmail());
+	    Optional<Email> emailOptional = emailRepository
+		    .findByEmailAddress(dto.getEmail());
 	    if (emailOptional.isPresent()) {
 		person.setEmail(emailOptional.get());
 	    } else {
@@ -97,16 +100,17 @@ public class PersonService {
 	    }
 	}
 	if (dto.getPhone() != person.getPhone().getPhoneNumber()) {
-	    Optional<Phone> phoneOptional = phoneRepository.findByPhoneNumber(dto.getPhone());
+	    Optional<Phone> phoneOptional = phoneRepository
+		    .findByPhoneNumber(dto.getPhone());
 	    if (phoneOptional.isPresent()) {
 		person.setPhone(phoneOptional.get());
 	    } else {
 		person.setPhone(new Phone(dto.getPhone()));
 	    }
 	}
-
-	return new PersonDto(personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).get());
-
+	return new PersonDto(personRepository
+		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName())
+		.get());
     }
 
     @Transactional
@@ -128,4 +132,5 @@ public class PersonService {
 	}
 	return this.getAll();
     }
+
 }

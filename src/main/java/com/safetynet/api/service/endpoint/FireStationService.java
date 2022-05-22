@@ -1,3 +1,4 @@
+
 package com.safetynet.api.service.endpoint;
 
 import java.util.HashSet;
@@ -17,12 +18,10 @@ import com.safetynet.api.service.exception.DataAlreadyCreatedException;
 import com.safetynet.api.service.exception.UnknownAddressException;
 import com.safetynet.api.service.exception.UnknownFireStationException;
 
-import lombok.Data;
 
-
-@Data
 @Service
 public class FireStationService {
+
     @Autowired
     private HomeRepository homeDAO;
 
@@ -38,16 +37,19 @@ public class FireStationService {
 		Home savedHome = homeDAO.save(home);
 		return new FireStationDto(savedHome.getAddress(), savedHome.getStation());
 	    } else {
-		throw new DataAlreadyCreatedException("Mapping already created. Impossible to create the entered value");
+		throw new DataAlreadyCreatedException(
+			"Mapping already created. Impossible to create the entered value");
 	    }
 	}
     }
 
     @Transactional
-    public Iterable<FireStationDto> createAllFromJson(JsonFileFirestationsDto jsonFileFirestationsDto) {
+    public Iterable<FireStationDto> createAllFromJson(
+	    JsonFileFirestationsDto jsonFileFirestationsDto) {
 	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
-	for (FireStationDto fireStationDto : jsonFileFirestationsDto.getFireStationDtos()) {
-	    returnValue.add(this.create(fireStationDto));
+	for (FireStationDto fireStationDto : jsonFileFirestationsDto
+		.getFireStationDtos()) {
+	    returnValue.add(create(fireStationDto));
 	}
 	return returnValue;
     }
@@ -62,7 +64,8 @@ public class FireStationService {
 	    home.setStation(-1);
 	    homeDAO.save(home);
 	}
-	return "The home at address \"" + address + "\" is no longer covered by any fire station.";
+	return "The home at address \"" + address
+		+ "\" is no longer covered by any fire station.";
     }
 
     @Transactional
@@ -74,13 +77,14 @@ public class FireStationService {
 	} else {
 	    for (Home home : homeIterable) {
 		home.setStation(-1);
-		deletedMapping.add("The home at address \"" + home.getAddress() + "\" is no longer covered by any fire station.");
+		deletedMapping.add("The home at address \"" + home.getAddress()
+			+ "\" is no longer covered by any fire station.");
 	    }
 	    homeDAO.saveAll(homeIterable);
 	    return deletedMapping;
 	}
     }
-    
+
     public Iterable<FireStationDto> getAll() {
 	Set<FireStationDto> dtos = new HashSet<FireStationDto>();
 	for (Home home : homeDAO.findAll()) {

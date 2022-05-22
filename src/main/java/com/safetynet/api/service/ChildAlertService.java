@@ -10,14 +10,14 @@ import com.safetynet.api.service.exception.UnknownAddressException;
 
 import lombok.Data;
 
-@Data
+
 @Service
 public class ChildAlertService {
 
     @Autowired
     PersonRepository personRepository;
 
-    public ChildAlertDto getAlertData(String address) {
+    public ChildAlertDto getData(String address) {
 	Iterable<Person> persons = personRepository.findAllByHomeAddress(address);
 	if (persons != null && persons.iterator().hasNext()) {
 	    return new ChildAlertDto(persons);

@@ -53,7 +53,7 @@ public class AlertController extends Controller {
 
     @GetMapping("/childAlert")
     public ChildAlertDto getChildAlert(@RequestParam String address) {
-	return childAlertService.getAlertData(address);
+	return childAlertService.getData(address);
     }
 
     @GetMapping("/phoneAlert")
