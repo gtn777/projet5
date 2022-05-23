@@ -1,3 +1,4 @@
+
 package com.safetynet.api.service;
 
 import java.util.HashSet;
@@ -12,9 +13,7 @@ import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.service.exception.UnknownPersonException;
 
-import lombok.Data;
 
-@Data
 @Service
 public class PersonInfoService {
 
@@ -25,18 +24,17 @@ public class PersonInfoService {
     private MedicalRecordRepository medicalRecordRepository;
 
     public Iterable<PersonInfoDto> getPersonInfo(String firstName, String lastName) {
-	
 	Set<PersonInfoDto> dtos = new HashSet<PersonInfoDto>();
-	Iterable<Person> persons = personRepository.findAllByFirstNameAndLastName(firstName, lastName);
-	if(persons != null && persons.iterator().hasNext()) {
+	Iterable<Person> persons = personRepository
+		.findAllByFirstNameAndLastName(firstName, lastName);
+	if (persons != null && persons.iterator().hasNext()) {
 	    for (Person person : persons) {
-		dtos.add(new PersonInfoDto(person, medicalRecordRepository.findByPersonFirstNameAndPersonLastName(firstName, lastName)));
+		dtos.add(new PersonInfoDto(person, medicalRecordRepository
+			.findByPersonFirstNameAndPersonLastName(firstName, lastName)));
 	    }
 	    return dtos;
-	}else {
+	} else {
 	    throw new UnknownPersonException(firstName, lastName);
 	}
-
     }
-
 }

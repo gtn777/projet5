@@ -15,10 +15,7 @@ import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.service.exception.UnknownFireStationException;
 
-import lombok.Data;
 
-
-@Data
 @Service
 public class FloodAlertService {
 
@@ -28,8 +25,8 @@ public class FloodAlertService {
     @Autowired
     private HomeRepository homeRepository;
 
-    public Object getFloodAlert(Iterable<Integer> stations) {
-	// if a station is unknown in database throw new exception
+    public Map<String, Set<FloodOrFireAlertPersonDto>> getData(
+	    Iterable<Integer> stations) {
 	for (Integer station : stations) {
 	    if (!homeRepository.existsByStation(station))
 		throw new UnknownFireStationException(station);

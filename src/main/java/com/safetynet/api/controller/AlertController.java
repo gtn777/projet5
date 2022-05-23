@@ -75,7 +75,7 @@ public class AlertController extends Controller {
 
     @GetMapping("/flood")
     public Object getFloodAlert(@RequestParam Set<Integer> stations) {
-	return floodAlertService.getFloodAlert(stations);
+	return floodAlertService.getData(stations);
     }
 
     @GetMapping("/fire")
