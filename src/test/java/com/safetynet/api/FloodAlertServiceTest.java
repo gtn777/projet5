@@ -47,10 +47,10 @@ public class FloodAlertServiceTest {
     private HomeRepository homeRepository;
 
     @Captor
-    private ArgumentCaptor<Set<Integer>> argCaptor;
+    private ArgumentCaptor<Set<Integer>> argSetInteger;
 
     @Captor
-    private ArgumentCaptor<Integer> argCaptor2;
+    private ArgumentCaptor<Integer> argInteger;
 
     private Set<Integer> stations;
 
@@ -76,8 +76,8 @@ public class FloodAlertServiceTest {
 
     @AfterEach
     public void afterEach() {
-	verify(homeRepository, Mockito.times(1)).existsByStation(argCaptor2.capture());
-	assertEquals(argCaptor2.getValue(), 5);
+	verify(homeRepository, Mockito.times(1)).existsByStation(argInteger.capture());
+	assertEquals(argInteger.getValue(), 5);
     }
 
     @Test
@@ -93,8 +93,8 @@ public class FloodAlertServiceTest {
 		.getData(stations);
 	// THEN
 	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStationIn(argCaptor.capture());
-	assertEquals(argCaptor.getValue(), stations);
+		.findAllByHomeStationIn(argSetInteger.capture());
+	assertEquals(argSetInteger.getValue(), stations);
 	assertTrue(result.containsKey("15 rue du test"));
 	assertTrue(result.size() == 1);
 	assertTrue(result.get("15 rue du test").size() == 2);
@@ -106,7 +106,7 @@ public class FloodAlertServiceTest {
 	assertThrows(UnknownFireStationException.class,
 		() -> floodAlertService.getData(stations));
 	verify(personRepository, Mockito.times(0))
-		.findAllByHomeStationIn(argCaptor.capture());
+		.findAllByHomeStationIn(argSetInteger.capture());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class FloodAlertServiceTest {
 	assertThrows(UnknownFireStationException.class,
 		() -> floodAlertService.getData(stations));
 	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStationIn(argCaptor.capture());
+		.findAllByHomeStationIn(argSetInteger.capture());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class FloodAlertServiceTest {
 	assertThrows(UnknownFireStationException.class,
 		() -> floodAlertService.getData(stations));
 	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStationIn(argCaptor.capture());
+		.findAllByHomeStationIn(argSetInteger.capture());
     }
 
 }

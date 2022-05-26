@@ -1,19 +1,25 @@
 
 package com.safetynet.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.safetynet.api.dto.PersonInfoDto;
 import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.entity.Person;
@@ -39,9 +45,13 @@ public class PersonInfoServiceTest {
 
     private final String lastName = "Test";
 
+    private Person person1;
+
     private Set<Person> personIterable;
 
-    private Person person1;
+    Set<PersonInfoDto> result;
+
+    private ArgumentCaptor<String> argString;
 
     @BeforeEach
     public void beforEach() {
@@ -52,6 +62,14 @@ public class PersonInfoServiceTest {
 	person1.setHome(new Home("15 rue du test", "Paris", "75010"));
 	personIterable = new HashSet<Person>();
 	personIterable.add(person1);
+	result = new HashSet<PersonInfoDto>();
+    }
+
+    @AfterEach
+    public void afterEach() {
+	verify(personRepository, Mockito.times(1))
+		.findAllByFirstNameAndLastName(argString.capture(), lastName);
+	assertEquals(argString.getValue(), firstName);
     }
 
     @Test
