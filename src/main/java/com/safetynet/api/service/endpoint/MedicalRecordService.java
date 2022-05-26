@@ -50,25 +50,27 @@ public class MedicalRecordService {
     }
 
     @Transactional
-    public MedicalRecord create(MedicalRecordDto dto) {
-	Person linkedPerson;
-	Optional<Person> optionalPerson = personDAO
-		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
-	if (optionalPerson.isEmpty()) {
+    public MedicalRecordDto create(MedicalRecordDto dto) {
+	Person person;
+	// Check if a person exists with firstName and lastName
+	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(),
+		dto.getLastName());
+	if (optionalPerson == null || optionalPerson.isEmpty()) {
 	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
 	} else {
-	    linkedPerson = optionalPerson.get();
+	    person = optionalPerson.get();
 	}
 	MedicalRecord newRecord = new MedicalRecord();
-	newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(),
-		DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+	newRecord.setBirthdate(
+		LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+	// Management of allergy duplicates
 	for (String dtoAllergie : dto.getAllergies()) {
-	    Optional<Allergie> allergieOptional = allergieDAO
-		    .findByAllergieString(dtoAllergie);
+	    Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
 	    newRecord.getRecordAllergies()
 		    .add(allergieOptional.isPresent() ? allergieOptional.get()
 			    : allergieDAO.save(new Allergie(dtoAllergie)));
 	}
+	// Management of medication duplicates
 	for (String dtoMedication : dto.getMedications()) {
 	    Optional<Medication> newMedication = medicationDAO
 		    .findByMedicationString(dtoMedication);
@@ -76,50 +78,53 @@ public class MedicalRecordService {
 		    .add(newMedication.isPresent() ? newMedication.get()
 			    : medicationDAO.save(new Medication(dtoMedication)));
 	}
-	linkedPerson.setMedicalRecord(newRecord);
-	newRecord.setPerson(linkedPerson);
-	personDAO.save(linkedPerson);
-	return linkedPerson.getMedicalRecord();
+	person.setMedicalRecord(newRecord);
+	newRecord.setPerson(person);
+	return new MedicalRecordDto(personDAO.save(person).getMedicalRecord());
     }
 
     public MedicalRecordDto update(MedicalRecordDto dto) {
-	Person linkedPerson;
-	Optional<Person> optionalPerson = personDAO
-		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName());
-	if (optionalPerson.isEmpty()) {
+	Person person;
+	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(),
+		dto.getLastName());
+	if (optionalPerson == null || optionalPerson.isEmpty()) {
 	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
 	} else {
-	    linkedPerson = optionalPerson.get();
+	    person = optionalPerson.get();
+	}
+	if (person.getMedicalRecord() == null) {
+	    MedicalRecord newRecord = new MedicalRecord();
+	    newRecord.setBirthdate(
+		    LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+	    newRecord.setPerson(person);
+	    person.setMedicalRecord(newRecord);
 	}
 	for (String dtoAllergie : dto.getAllergies()) {
-	    if (!linkedPerson.getAllergiesSet().contains(dtoAllergie)) {
-		Optional<Allergie> allergieOptional = allergieDAO
-			.findByAllergieString(dtoAllergie);
-		linkedPerson.getMedicalRecord()
+	    if (!person.getAllergiesSet().contains(dtoAllergie)) {
+		Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
+		person.getMedicalRecord()
 			.getRecordAllergies()
 			.add(allergieOptional.isPresent() ? allergieOptional.get()
 				: allergieDAO.save(new Allergie(dtoAllergie)));
 	    }
 	}
 	for (String dtoMedication : dto.getMedications()) {
-	    if (!linkedPerson.getMedicationsSet().contains(dtoMedication)) {
+	    if (!person.getMedicationsSet().contains(dtoMedication)) {
 		Optional<Medication> medicationOptional = medicationDAO
 			.findByMedicationString(dtoMedication);
-		linkedPerson.getMedicalRecord()
+		person.getMedicalRecord()
 			.getRecordMedications()
 			.add(medicationOptional.isPresent() ? medicationOptional.get()
 				: medicationDAO.save(new Medication(dtoMedication)));
 	    }
 	}
-	personDAO.save(linkedPerson);
-	return new MedicalRecordDto(linkedPerson.getMedicalRecord());
+	return new MedicalRecordDto(personDAO.save(person).getMedicalRecord());
     }
 
-    public MedicalRecordDto delete(MedicalRecordDto dto) { return null; }
+    public MedicalRecordDto delete(MedicalRecordDto dto) { return dto; }
 
     @Transactional
-    public Iterable<MedicalRecordDto> createAllFromJsonFile(
-	    JsonFileMedicalrecordsDto dto) {
+    public Iterable<MedicalRecordDto> createAllFromJsonFile(JsonFileMedicalrecordsDto dto) {
 	for (MedicalRecordDto medicalRecord : dto.getMedicalRecordDtos()) {
 	    create(medicalRecord);
 	}

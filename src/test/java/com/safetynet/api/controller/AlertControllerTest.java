@@ -1,3 +1,4 @@
+
 package com.safetynet.api.controller;
 
 import static org.mockito.Mockito.when;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.safetynet.api.controller.AlertController;
 import com.safetynet.api.service.ChildAlertService;
 import com.safetynet.api.service.CommunityEmailService;
 import com.safetynet.api.service.FireAlertService;
@@ -98,7 +98,8 @@ public class AlertControllerTest {
 
     @Test
     public void unknownAddressExceptionHandlerTest() throws Exception {
-	when(fireAlertService.getData("1509 Culver S")).thenThrow(new UnknownAddressException("1509 Culver S"));
+	when(fireAlertService.getData("1509 Culver S"))
+		.thenThrow(new UnknownAddressException("1509 Culver S"));
 	mockMvc.perform(get("/fire?address=1509 Culver S")).andExpect(status().isNotFound());
     }
 
@@ -110,8 +111,10 @@ public class AlertControllerTest {
 
     @Test
     public void unknownPersonExceptionHandlerTest() throws Exception {
-	when(personInfoService.getPersonInfo("Joh", "Boyd")).thenThrow(new UnknownPersonException("Joh", "Boyd"));
-	mockMvc.perform(get("/personInfo?firstName=Joh&lastName=Boyd")).andExpect(status().isNotFound());
+	when(personInfoService.getData("Joh", "Boyd"))
+		.thenThrow(new UnknownPersonException("Joh", "Boyd"));
+	mockMvc.perform(get("/personInfo?firstName=Joh&lastName=Boyd"))
+		.andExpect(status().isNotFound());
     }
 
     @Test
@@ -124,7 +127,6 @@ public class AlertControllerTest {
     public void missingServletRequestParameterExceptionHandlerTest() throws Exception {
 	mockMvc.perform(get("/communityEmail")).andExpect(status().isBadRequest());
     }
-
 //    @ExceptionHandler(value = { MissingServletRequestParameterException.class })
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    public ResponseEntity<String> handleMissingServletRequestParameterException(Exception exception) {
