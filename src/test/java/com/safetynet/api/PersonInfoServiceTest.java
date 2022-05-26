@@ -63,13 +63,13 @@ public class PersonInfoServiceTest {
 	personIterable = new HashSet<Person>();
 	personIterable.add(person1);
 	result = new HashSet<PersonInfoDto>();
+	argString = ArgumentCaptor.forClass(String.class);
     }
 
     @AfterEach
     public void afterEach() {
 	verify(personRepository, Mockito.times(1))
-		.findAllByFirstNameAndLastName(argString.capture(), lastName);
-	assertEquals(argString.getValue(), firstName);
+		.findAllByFirstNameAndLastName(lastName, firstName);
     }
 
     @Test

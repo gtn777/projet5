@@ -1,8 +1,11 @@
 
 package com.safetynet.api.controller;
 
+
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +27,7 @@ import com.safetynet.api.service.PhoneAlertService;
 @RestController
 public class AlertController extends Controller {
 
+    private static Logger logger = LoggerFactory.getLogger(AlertController.class);
     @Autowired
     PhoneAlertService phoneAlertService;
 
@@ -45,10 +49,14 @@ public class AlertController extends Controller {
     @Autowired
     FireStationCoverageService fireStationCoverageService;
 
+    
     @GetMapping("/firestation")
     public FireStationCoverageDto getCoverageDataByStationNumber(
 	    @RequestParam int station) {
-	return fireStationCoverageService.getData(station);
+	logger.debug("Appel avec le parametre station: " + station);
+	FireStationCoverageDto result = fireStationCoverageService.getData(station);
+	logger.info(result.toString());
+	return result;
     }
 
     @GetMapping("/childAlert")
