@@ -23,7 +23,7 @@ public class PersonInfoService {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
 
-    public Iterable<PersonInfoDto> getPersonInfo(String firstName, String lastName) {
+    public Set<PersonInfoDto> getData(String firstName, String lastName) {
 	Set<PersonInfoDto> dtos = new HashSet<PersonInfoDto>();
 	Iterable<Person> persons = personRepository
 		.findAllByFirstNameAndLastName(firstName, lastName);

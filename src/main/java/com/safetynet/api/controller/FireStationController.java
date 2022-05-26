@@ -1,3 +1,4 @@
+
 package com.safetynet.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.safetynet.api.service.endpoint.FireStationService;
 
 @RestController
 public class FireStationController extends Controller {
+
     @Autowired
     private FireStationService fireStationService;
 
@@ -34,9 +36,11 @@ public class FireStationController extends Controller {
     public ResponseEntity<Object> deleteMapping(@RequestParam(required = false) String address,
 	    @RequestParam(required = false) Integer station) {
 	if (address != null) {
-	    return ResponseEntity.status(HttpStatus.OK).body(fireStationService.deleteAddressMapping(address));
+	    return ResponseEntity.status(HttpStatus.OK)
+		    .body(fireStationService.deleteAddressMapping(address));
 	} else if (station != null) {
-	    return ResponseEntity.status(HttpStatus.OK).body(fireStationService.deleteStationMapping(station));
+	    return ResponseEntity.status(HttpStatus.OK)
+		    .body(fireStationService.deleteStationMapping(station));
 	} else {
 	    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 		    .body("No address of type string or station of type integer found as request paramater.");
@@ -45,4 +49,5 @@ public class FireStationController extends Controller {
 
     @GetMapping("/firestationAll")
     public Object getAll() { return fireStationService.getAll(); }
+
 }

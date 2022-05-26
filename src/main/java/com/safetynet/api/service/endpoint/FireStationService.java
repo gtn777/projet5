@@ -47,8 +47,7 @@ public class FireStationService {
     public Iterable<FireStationDto> createAllFromJson(
 	    JsonFileFirestationsDto jsonFileFirestationsDto) {
 	Set<FireStationDto> returnValue = new HashSet<FireStationDto>();
-	for (FireStationDto fireStationDto : jsonFileFirestationsDto
-		.getFireStationDtos()) {
+	for (FireStationDto fireStationDto : jsonFileFirestationsDto.getFireStationDtos()) {
 	    returnValue.add(create(fireStationDto));
 	}
 	return returnValue;
@@ -64,8 +63,7 @@ public class FireStationService {
 	    home.setStation(-1);
 	    homeDAO.save(home);
 	}
-	return "The home at address \"" + address
-		+ "\" is no longer covered by any fire station.";
+	return "The home at address \"" + address + "\" is no longer covered by any fire station.";
     }
 
     @Transactional

@@ -1,5 +1,5 @@
 
-package com.safetynet.api;
+package com.safetynet.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,7 +30,7 @@ import com.safetynet.api.service.exception.UnknownAddressException;
 
 
 @ExtendWith(MockitoExtension.class)
-public class FireAlertTest {
+public class FireAlertServiceTest {
 
     @InjectMocks
     FireAlertService fireAlertService;

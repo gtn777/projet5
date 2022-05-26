@@ -70,7 +70,7 @@ public class AlertController extends Controller {
     @GetMapping("/personInfo")
     public Iterable<PersonInfoDto> getPersonInfo(@RequestParam String firstName,
 	    String lastName) {
-	return personInfoService.getPersonInfo(firstName, lastName);
+	return personInfoService.getData(firstName, lastName);
     }
 
     @GetMapping("/flood")

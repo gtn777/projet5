@@ -1,5 +1,5 @@
 
-package com.safetynet.api;
+package com.safetynet.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
