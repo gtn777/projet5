@@ -25,12 +25,12 @@ public class PersonInfoService {
 
     public Set<PersonInfoDto> getData(String firstName, String lastName) {
 	Set<PersonInfoDto> dtos = new HashSet<PersonInfoDto>();
-	Iterable<Person> persons = personRepository
-		.findAllByFirstNameAndLastName(firstName, lastName);
+	Iterable<Person> persons = personRepository.findAllByFirstNameAndLastName(firstName, lastName);
 	if (persons != null && persons.iterator().hasNext()) {
 	    for (Person person : persons) {
-		dtos.add(new PersonInfoDto(person, medicalRecordRepository
-			.findByPersonFirstNameAndPersonLastName(firstName, lastName)));
+		dtos.add(new PersonInfoDto(person,
+		    medicalRecordRepository.findByPersonFirstNameAndPersonLastName(firstName, lastName)
+			.get()));
 	    }
 	    return dtos;
 	} else {

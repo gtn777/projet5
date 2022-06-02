@@ -3,6 +3,7 @@ package com.safetynet.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,6 @@ import com.safetynet.api.entity.Home;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.entity.Phone;
 import com.safetynet.api.repository.HomeRepository;
-import com.safetynet.api.service.FireAlertService;
 import com.safetynet.api.service.exception.UnknownAddressException;
 
 
@@ -45,6 +46,12 @@ public class FireAlertServiceTest {
     private Person person;
 
     private Home home;
+
+    @BeforeAll
+    @Test
+    public static void fireAlertDtoConstructorTest() {
+	assertTrue(new FireAlertDto().getPersons().isEmpty());
+    }
 
     @BeforeEach
     public void beforEach() { argCaptor = ArgumentCaptor.forClass(String.class); }
@@ -72,15 +79,13 @@ public class FireAlertServiceTest {
     @Test
     public void getData_daoResponseIsNullTest() {
 	when(homeRepository.findByAddress(address)).thenReturn(null);
-	assertThrows(UnknownAddressException.class,
-		() -> fireAlertService.getData(address));
+	assertThrows(UnknownAddressException.class, () -> fireAlertService.getData(address));
     }
 
     @Test
     public void getData_unknownAddressExceptioTest() {
 	when(homeRepository.findByAddress(address)).thenReturn(Optional.empty());
-	assertThrows(UnknownAddressException.class,
-		() -> fireAlertService.getData(address));
+	assertThrows(UnknownAddressException.class, () -> fireAlertService.getData(address));
     }
 
 }

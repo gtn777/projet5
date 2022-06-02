@@ -3,6 +3,7 @@ package com.safetynet.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,6 +57,12 @@ public class PhoneAlertServiceTest {
 	persons.add(person1);
 	persons.add(person2);
 	argCaptor = ArgumentCaptor.forClass(Integer.class);
+    }
+
+    @BeforeAll
+    @Test
+    public static void phoneAlertDtoConsturctorTest() {
+	assertTrue(new PhoneAlertDto().getPhoneAlert() == null);
     }
 
     @AfterEach

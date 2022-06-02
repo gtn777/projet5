@@ -1,5 +1,5 @@
 
-package com.safetynet.api.controller;
+package com.safetynet.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.api.controller.FireStationController;
 import com.safetynet.api.dto.endpoints.FireStationDto;
 import com.safetynet.api.service.endpoint.FireStationService;
 

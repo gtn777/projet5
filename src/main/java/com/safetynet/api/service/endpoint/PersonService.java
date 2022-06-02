@@ -20,6 +20,9 @@ import com.safetynet.api.repository.EmailRepository;
 import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.repository.PhoneRepository;
+import com.safetynet.api.service.exception.DataAlreadyCreatedException;
+import com.safetynet.api.service.exception.DataAlreadyUpToDateException;
+import com.safetynet.api.service.exception.UnknownPersonException;
 
 
 @Service
@@ -48,33 +51,31 @@ public class PersonService {
 
     @Transactional
     public PersonDto createPerson(PersonDto dto) {
-	// Si la personne est déja présente en base on retourne NULL
-	if (personRepository
-		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName())
-		.isPresent()) {
-	    return null;
+	// Check if person is already known in DB
+	if (personRepository.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()).isPresent()) {
+	    throw new DataAlreadyCreatedException("Person with name :" + dto.getFirstName() + " "
+		+ dto.getLastName()
+		+ " is ever known in database, use update or delete functionnality to modify person's data.");
 	}
-	// on crée une npersonne et lui attribue les nouveaux nom et prénom
 	Person newPerson = new Person();
 	newPerson.setFirstName(dto.getFirstName());
 	newPerson.setLastName(dto.getLastName());
-	// on check si le phone est connu, si oui on l'attribue a person, ou alors on
-	// crée et enregistre un nouveau numéro
+	// Check if phone is already known in DB to avoid duplicates
 	Optional<Phone> phoneOptional = phoneRepository.findByPhoneNumber(dto.getPhone());
 	if (phoneOptional.isPresent()) {
 	    newPerson.setPhone(phoneOptional.get());
 	} else {
 	    newPerson.setPhone(phoneRepository.save(new Phone(dto.getPhone())));
 	}
-	Optional<Email> emailOptional = emailRepository
-		.findByEmailAddress(dto.getEmail());
+	// Check if the email is already known in DB to avoid duplicates
+	Optional<Email> emailOptional = emailRepository.findByEmailAddress(dto.getEmail());
 	if (emailOptional.isPresent()) {
 	    newPerson.setEmail(emailOptional.get());
 	} else {
 	    newPerson.setEmail(emailRepository.save(new Email(dto.getEmail())));
 	}
-	Optional<Home> homeOptional = homeRepository
-		.findByAddressAndCity(dto.getAddress(), dto.getCity());
+	// Check if the home is already known in DB to avoid duplicates
+	Optional<Home> homeOptional = homeRepository.findByAddressAndCity(dto.getAddress(), dto.getCity());
 	if (homeOptional.isPresent()) {
 	    newPerson.setHome(homeOptional.get());
 	} else {
@@ -85,45 +86,52 @@ public class PersonService {
     }
 
     @Transactional
-    public PersonDto updatePerson(PersonDto dto) {
-	Person person = personRepository
-		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName())
-		.get();
+    public PersonDto update(PersonDto dto) {
+	Person person;
+	Optional<Person> personOptional = personRepository.findByFirstNameAndLastName(dto.getFirstName(),
+	    dto.getLastName());
+	if (personOptional.isEmpty()) {
+	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
+	} else if (personOptional.get() == new Person(dto)) {
+	    throw new DataAlreadyUpToDateException("Person with name :" + dto.getFirstName() + " "
+		+ dto.getLastName() + " is already up to date");
+	} else {
+	    person = personOptional.get();
+	}
 	if (dto.getEmail() != person.getEmail().getEmailAddress()) {
-	    Optional<Email> emailOptional = emailRepository
-		    .findByEmailAddress(dto.getEmail());
+	    Optional<Email> emailOptional = emailRepository.findByEmailAddress(dto.getEmail());
 	    if (emailOptional.isPresent()) {
 		person.setEmail(emailOptional.get());
 	    } else {
-//		Optional<Email> oldMail = emailRepository.findByEmailString(person.getEmailString());
 		person.setEmail(new Email(dto.getEmail()));
 	    }
 	}
 	if (dto.getPhone() != person.getPhone().getPhoneNumber()) {
-	    Optional<Phone> phoneOptional = phoneRepository
-		    .findByPhoneNumber(dto.getPhone());
+	    Optional<Phone> phoneOptional = phoneRepository.findByPhoneNumber(dto.getPhone());
 	    if (phoneOptional.isPresent()) {
 		person.setPhone(phoneOptional.get());
 	    } else {
 		person.setPhone(new Phone(dto.getPhone()));
 	    }
 	}
-	return new PersonDto(personRepository
-		.findByFirstNameAndLastName(dto.getFirstName(), dto.getLastName())
-		.get());
-    }
-
-    @Transactional
-    public void deletePerson(String firstName, String lastName) {
-	personRepository.deleteByFirstNameAndLastName(firstName, lastName);
-    }
-
-    @Transactional
-    public Iterable<PersonDto> createAllPerson(Iterable<PersonDto> personList) {
-	for (PersonDto personDto : personList) {
-	    createPerson(personDto);
+	Optional<Home> homeOptional = homeRepository.findByAddressAndCity(dto.getAddress(), dto.getCity());
+	if (homeOptional.isPresent()) {
+	    person.setHome(homeOptional.get());
+	} else {
+	    Home newHome = new Home(dto.getAddress(), dto.getCity(), dto.getZip());
+	    person.setHome(homeRepository.save(newHome));
 	}
-	return this.getAll();
+	return new PersonDto(personRepository.save(person));
+    }
+
+    @Transactional
+    public PersonDto deletePerson(String firstName, String lastName) {
+	Optional<Person> personOptional = personRepository.findByFirstNameAndLastName(firstName, lastName);
+	if (personOptional.isEmpty()) {
+	    throw new UnknownPersonException(firstName, lastName);
+	} else {
+	    return new PersonDto(personRepository.deleteByFirstNameAndLastName(firstName, lastName));
+	}
     }
 
     public Iterable<PersonDto> createAllFromJsonFile(JsonFilePersonsDto personsDto) {

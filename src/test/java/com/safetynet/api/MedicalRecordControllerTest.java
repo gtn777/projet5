@@ -1,11 +1,10 @@
 
-package com.safetynet.api.controller;
+package com.safetynet.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.api.controller.MedicalRecordController;
 import com.safetynet.api.dto.endpoints.MedicalRecordDto;
 import com.safetynet.api.service.endpoint.MedicalRecordService;
 
@@ -32,15 +32,11 @@ public class MedicalRecordControllerTest {
 
     private MedicalRecordDto dto;
 
-    private String firstName;
+    private String firstName = "Franck";
 
-    private String lastName;
+    private String lastName = "Test";
 
-    private String birthDate;
-
-    private Set<String> allergies;
-
-    private Set<String> medications;
+    private String birthDate = "20/02/2000";
 
     @BeforeEach
     public void beforeEach() {
@@ -55,23 +51,23 @@ public class MedicalRecordControllerTest {
     @Test
     public void postMedicalRecord() throws Exception {
 	mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord")
-		.contentType(MediaType.APPLICATION_JSON)
-		.content(new ObjectMapper().writeValueAsString(dto)))
-		.andExpect(status().isCreated());
+	    .contentType(MediaType.APPLICATION_JSON)
+	    .content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().isCreated());
     }
 
     @Test
     public void putMedicalRecord() throws Exception {
 	mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord")
-		.contentType(MediaType.APPLICATION_JSON)
-		.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().isOk());
+	    .contentType(MediaType.APPLICATION_JSON)
+	    .content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().isOk());
     }
 
     @Test
     public void deleteMedicalRecord() throws Exception {
-	mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord")
-		.contentType(MediaType.APPLICATION_JSON)
-		.content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().isOk());
+	mockMvc
+	    .perform(MockMvcRequestBuilders
+		.delete("/medicalRecord?firstName=" + firstName + ", lastName=" + lastName))
+	    .andExpect(status().isOk());
     }
 
     @Test

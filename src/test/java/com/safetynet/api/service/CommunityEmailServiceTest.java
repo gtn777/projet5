@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.safetynet.api.entity.Email;
 import com.safetynet.api.repository.EmailRepository;
-import com.safetynet.api.service.CommunityEmailService;
 import com.safetynet.api.service.exception.UnknownCityException;
 
 
@@ -43,8 +42,7 @@ public class CommunityEmailServiceTest {
 
     @AfterEach
     public void afterEach() {
-	verify(emailRepository, Mockito.times(1))
-		.findAllByPersonsHomeCity(argStringCaptor.capture());
+	verify(emailRepository, Mockito.times(1)).findAllByPersonsHomeCity(argStringCaptor.capture());
 	assertEquals(argStringCaptor.getValue(), city);
     }
 
@@ -67,8 +65,7 @@ public class CommunityEmailServiceTest {
 	// given
 	when(emailRepository.findAllByPersonsHomeCity(city)).thenReturn(null);
 	// WHEN
-	assertThrows(UnknownCityException.class,
-		() -> communityEmailService.getData(city));
+	assertThrows(UnknownCityException.class, () -> communityEmailService.getData(city));
     }
 
     @Test
@@ -77,8 +74,7 @@ public class CommunityEmailServiceTest {
 	Set<Email> emailIterable = new HashSet<Email>();
 	when(emailRepository.findAllByPersonsHomeCity(city)).thenReturn(emailIterable);
 	// WHEN
-	assertThrows(UnknownCityException.class,
-		() -> communityEmailService.getData(city));
+	assertThrows(UnknownCityException.class, () -> communityEmailService.getData(city));
     }
 
 }

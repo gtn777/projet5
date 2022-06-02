@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.safetynet.api.dto.endpoints.PersonDto;
 import com.safetynet.api.util.DateUtil;
 
 import lombok.Data;
@@ -36,6 +37,14 @@ public class Person implements Serializable {
     public Person(String firstName, String lastName) {
 	this.firstName = firstName;
 	this.lastName = lastName;
+    }
+ 
+    public Person(PersonDto dto) {
+	this.firstName = dto.getFirstName();
+	this.lastName = dto.getLastName();
+	this.email = new Email(dto.getEmail());
+	this.phone = new Phone(dto.getPhone());
+	this.home = new Home(dto.getAddress(), dto.getCity(), dto.getZip());
     }
 
     @Id
@@ -95,7 +104,7 @@ public class Person implements Serializable {
 
     public int getAge() {
 	return this.getMedicalRecord() == null ? 999
-		: DateUtil.calculateAgeWithJava7(this.getMedicalRecord().getBirthdate());
+	    : DateUtil.calculateAgeWithJava7(this.getMedicalRecord().getBirthdate());
     }
 
 }

@@ -1,5 +1,5 @@
 
-package com.safetynet.api.controller;
+package com.safetynet.api;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.safetynet.api.controller.AlertController;
 import com.safetynet.api.service.ChildAlertService;
 import com.safetynet.api.service.CommunityEmailService;
 import com.safetynet.api.service.FireAlertService;
@@ -57,7 +58,7 @@ public class AlertControllerTest {
 
     @Test
     public void getStationCoverageTest() throws Exception {
-	mockMvc.perform(get("/firestation?station=3")).andExpect(status().isOk()).andReturn();
+	mockMvc.perform(get("/firestation?station=3")).andExpect(status().isOk());
     }
 
     @Test

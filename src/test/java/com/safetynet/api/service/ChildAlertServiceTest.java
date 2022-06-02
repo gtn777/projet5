@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +26,6 @@ import com.safetynet.api.dto.ChildAlertDto;
 import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.PersonRepository;
-import com.safetynet.api.service.ChildAlertService;
 import com.safetynet.api.service.exception.UnknownAddressException;
 
 
@@ -46,6 +46,12 @@ public class ChildAlertServiceTest {
 
     private Person person2;
 
+    @BeforeAll
+    @Test
+    public static void childAlertDtoConstructorTest() {
+	assertTrue(new ChildAlertDto().getChildren().isEmpty());
+    }
+
     @BeforeEach
     public void beforEach() {
 	person1 = new Person("Franck", "Test");
@@ -59,8 +65,7 @@ public class ChildAlertServiceTest {
 
     @AfterEach
     public void afterEach() {
-	verify(personRepository, Mockito.times(1))
-		.findAllByHomeAddress(argCaptor.capture());
+	verify(personRepository, Mockito.times(1)).findAllByHomeAddress(argCaptor.capture());
 	assertEquals(argCaptor.getValue(), address);
     }
 
@@ -75,27 +80,21 @@ public class ChildAlertServiceTest {
 	ChildAlertDto result = childAlertService.getData(address);
 	// THEN
 	assertEquals(result, new ChildAlertDto(persons));
-	assertTrue(result.getAdults()
-		.contains(person1.getFirstName() + " " + person1.getLastName()));
-	assertTrue(result.getChildren()
-		.iterator()
-		.next()
-		.containsValue(person2.getFirstName()));
+	assertTrue(result.getAdults().contains(person1.getFirstName() + " " + person1.getLastName()));
+	assertTrue(result.getChildren().iterator().next().containsValue(person2.getFirstName()));
     }
 
     @Test
     public void getData_unknownAddressTest() {
 	Set<Person> persons = new HashSet<Person>();
 	when(personRepository.findAllByHomeAddress(address)).thenReturn(persons);
-	assertThrows(UnknownAddressException.class,
-		() -> childAlertService.getData(address));
+	assertThrows(UnknownAddressException.class, () -> childAlertService.getData(address));
     }
 
     @Test
     public void getData_daoResponseIsNullTest() {
 	when(personRepository.findAllByHomeAddress(address)).thenReturn(null);
-	assertThrows(UnknownAddressException.class,
-		() -> childAlertService.getData(address));
+	assertThrows(UnknownAddressException.class, () -> childAlertService.getData(address));
     }
 
 }

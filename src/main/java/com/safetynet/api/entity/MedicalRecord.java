@@ -52,4 +52,5 @@ public class MedicalRecord {
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     Set<Medication> recordMedications = new HashSet<Medication>();
+    
 }

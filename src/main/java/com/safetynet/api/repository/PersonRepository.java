@@ -18,7 +18,7 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 
     Optional<Person> findByFirstNameAndLastName(String firstName, String lastName);
 
-    void deleteByFirstNameAndLastName(String firstName, String lastName);
+    Person deleteByFirstNameAndLastName(String firstName, String lastName);
 
     int findIdByFirstNameAndLastName(String firstName, String lastName);
 

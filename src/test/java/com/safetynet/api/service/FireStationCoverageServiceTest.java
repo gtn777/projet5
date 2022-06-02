@@ -3,6 +3,7 @@ package com.safetynet.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +28,6 @@ import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.entity.Phone;
 import com.safetynet.api.repository.PersonRepository;
-import com.safetynet.api.service.FireStationCoverageService;
 import com.safetynet.api.service.exception.UnknownFireStationException;
 
 
@@ -47,6 +48,12 @@ public class FireStationCoverageServiceTest {
 
     private Person person2;
 
+    @BeforeAll
+    @Test
+    public static void fireStationCoverageDtoConstructorTest() {
+	assertTrue(new FireStationCoverageDto().getPersons().isEmpty());
+    }
+
     @BeforeEach
     public void beforEach() {
 	person1 = new Person("Franck", "Test");
@@ -64,8 +71,7 @@ public class FireStationCoverageServiceTest {
 
     @AfterEach
     public void afterEach() {
-	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStation(argCaptor.capture());
+	verify(personRepository, Mockito.times(1)).findAllByHomeStation(argCaptor.capture());
 	assertEquals(argCaptor.getValue(), station);
     }
 
@@ -88,16 +94,14 @@ public class FireStationCoverageServiceTest {
     @Test
     public void getData_daoResponseIsNullTest() {
 	when(personRepository.findAllByHomeStation(station)).thenReturn(null);
-	assertThrows(UnknownFireStationException.class,
-		() -> fireStationCoverageService.getData(station));
+	assertThrows(UnknownFireStationException.class, () -> fireStationCoverageService.getData(station));
     }
 
     @Test
     public void getData_unknownFireStationExceptioTest() {
 	Set<Person> persons = new HashSet<Person>();
 	when(personRepository.findAllByHomeStation(station)).thenReturn(persons);
-	assertThrows(UnknownFireStationException.class,
-		() -> fireStationCoverageService.getData(station));
+	assertThrows(UnknownFireStationException.class, () -> fireStationCoverageService.getData(station));
     }
 
 }

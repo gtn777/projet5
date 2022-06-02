@@ -30,7 +30,6 @@ import com.safetynet.api.entity.Person;
 import com.safetynet.api.entity.Phone;
 import com.safetynet.api.repository.HomeRepository;
 import com.safetynet.api.repository.PersonRepository;
-import com.safetynet.api.service.FloodAlertService;
 import com.safetynet.api.service.exception.UnknownFireStationException;
 
 
@@ -89,11 +88,9 @@ public class FloodAlertServiceTest {
 	when(homeRepository.existsByStation(5)).thenReturn(true);
 	when(personRepository.findAllByHomeStationIn(stations)).thenReturn(persons);
 	// WHEN
-	Map<String, Set<FloodOrFireAlertPersonDto>> result = floodAlertService
-		.getData(stations);
+	Map<String, Set<FloodOrFireAlertPersonDto>> result = floodAlertService.getData(stations);
 	// THEN
-	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStationIn(argSetInteger.capture());
+	verify(personRepository, Mockito.times(1)).findAllByHomeStationIn(argSetInteger.capture());
 	assertEquals(argSetInteger.getValue(), stations);
 	assertTrue(result.containsKey("15 rue du test"));
 	assertTrue(result.size() == 1);
@@ -103,10 +100,8 @@ public class FloodAlertServiceTest {
     @Test
     public void getData_daoResponseIsNullTest() {
 	when(homeRepository.existsByStation(5)).thenReturn(false);
-	assertThrows(UnknownFireStationException.class,
-		() -> floodAlertService.getData(stations));
-	verify(personRepository, Mockito.times(0))
-		.findAllByHomeStationIn(argSetInteger.capture());
+	assertThrows(UnknownFireStationException.class, () -> floodAlertService.getData(stations));
+	verify(personRepository, Mockito.times(0)).findAllByHomeStationIn(argSetInteger.capture());
     }
 
     @Test
@@ -114,20 +109,16 @@ public class FloodAlertServiceTest {
 	Set<Person> persons = new HashSet<Person>();
 	when(homeRepository.existsByStation(5)).thenReturn(true);
 	when(personRepository.findAllByHomeStationIn(stations)).thenReturn(persons);
-	assertThrows(UnknownFireStationException.class,
-		() -> floodAlertService.getData(stations));
-	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStationIn(argSetInteger.capture());
+	assertThrows(UnknownFireStationException.class, () -> floodAlertService.getData(stations));
+	verify(personRepository, Mockito.times(1)).findAllByHomeStationIn(argSetInteger.capture());
     }
 
     @Test
     public void getData_daoReturnNullTest() {
 	when(homeRepository.existsByStation(5)).thenReturn(true);
 	when(personRepository.findAllByHomeStationIn(stations)).thenReturn(null);
-	assertThrows(UnknownFireStationException.class,
-		() -> floodAlertService.getData(stations));
-	verify(personRepository, Mockito.times(1))
-		.findAllByHomeStationIn(argSetInteger.capture());
+	assertThrows(UnknownFireStationException.class, () -> floodAlertService.getData(stations));
+	verify(personRepository, Mockito.times(1)).findAllByHomeStationIn(argSetInteger.capture());
     }
 
 }

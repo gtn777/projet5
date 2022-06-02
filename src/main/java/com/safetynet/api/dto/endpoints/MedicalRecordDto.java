@@ -22,8 +22,7 @@ public class MedicalRecordDto implements Serializable {
 	this.firstName = mr.getPerson().getFirstName();
 	this.lastName = mr.getPerson().getLastName();
 	
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-	
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");	
 	String formattedDate = mr.getBirthdate().format(formatter);
 	this.birthdate = formattedDate;
 	
