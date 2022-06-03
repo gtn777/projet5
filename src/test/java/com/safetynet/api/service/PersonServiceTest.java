@@ -74,7 +74,7 @@ public class PersonServiceTest {
 	dto.setPhone(phone);
 	dto.setZip(zip);
 	person = new Person(dto);
-	dto = new PersonDto(person);
+//	dto = new PersonDto(person);
     }
 
     @Test

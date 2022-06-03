@@ -92,7 +92,7 @@ public class PersonService {
 	    dto.getLastName());
 	if (personOptional.isEmpty()) {
 	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
-	} else if (personOptional.get() == new Person(dto)) {
+	} else if (personOptional.get().equals(new Person(dto))) {
 	    throw new DataAlreadyUpToDateException("Person with name :" + dto.getFirstName() + " "
 		+ dto.getLastName() + " is already up to date");
 	} else {

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,6 +72,12 @@ public class FloodAlertServiceTest {
 	person2.setPhone(new Phone("9878-65"));
 	person1.setHome(new Home("15 rue du test", "Paris", "75010"));
 	person2.setHome(new Home("15 rue du test", "Paris", "75010"));
+    }
+
+    @BeforeAll
+    @Test
+    public static void FloodOrFireAlertPersonDtoConsturctorTest() {
+	assertTrue(new FloodOrFireAlertPersonDto().getAllergies().isEmpty());
     }
 
     @AfterEach
