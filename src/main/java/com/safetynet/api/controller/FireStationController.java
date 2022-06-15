@@ -22,16 +22,30 @@ public class FireStationController extends Controller {
     @Autowired
     private FireStationService fireStationService;
 
+    /**
+     * @param firestation address mapping
+     * @return the firestation / address mapping updated.
+     */
     @PostMapping("/firestation")
     public ResponseEntity<FireStationDto> createMapping(@RequestBody FireStationDto dto) {
 	return ResponseEntity.status(HttpStatus.CREATED).body(fireStationService.create(dto));
     }
 
+    /**
+     * @param firestation address mapping
+     * @return return the firestation / address mapping updated.
+     */
     @PutMapping("/firestation")
     public ResponseEntity<FireStationDto> updateMapping(@RequestBody FireStationDto dto) {
 	return ResponseEntity.status(HttpStatus.OK).body(fireStationService.create(dto));
     }
 
+    /**
+     * @param address
+     * @param station
+     * @param required is address OR station number
+     * @return a message confirmation after the mapping is deleted.
+     */
     @DeleteMapping("/firestation")
     public ResponseEntity<Object> deleteMapping(@RequestParam(required = false) String address,
 	    @RequestParam(required = false) Integer station) {
@@ -47,6 +61,9 @@ public class FireStationController extends Controller {
 	}
     }
 
+    /**
+     * @return all the firestation / address mapping
+     */
     @GetMapping("/firestationAll")
     public Object getAll() { return fireStationService.getAll(); }
 

@@ -57,35 +57,36 @@ public class MedicalRecordService {
 	MedicalRecord newRecord;
 	// Check if a person exists with firstName and lastName
 	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(),
-	    dto.getLastName());
+		dto.getLastName());
 	if (optionalPerson == null || optionalPerson.isEmpty()) {
 	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
 	} else {
 	    person = optionalPerson.get();
 	    // check if person medical record is already created in database
 	    if (person.getMedicalRecord() != null) {
-		throw new DataAlreadyCreatedException(
-		    "Medical record already created for " + dto.getFirstName() + "0" + dto.getLastName()
+		throw new DataAlreadyCreatedException("Medical record already created for "
+			+ dto.getFirstName() + "0" + dto.getLastName()
 			+ " , use update or delete request functionnality to modify record data.");
 	    } else {
 		newRecord = new MedicalRecord();
-		newRecord.setBirthdate(
-		    LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+		newRecord.setBirthdate(LocalDate.parse(dto.getBirthdate(),
+			DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	    }
 	}
 	// Management of allergy duplicates
 	for (String dtoAllergie : dto.getAllergies()) {
 	    Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
 	    newRecord.getRecordAllergies()
-		.add(allergieOptional.isPresent() ? allergieOptional.get()
-		    : allergieDAO.save(new Allergie(dtoAllergie)));
+		    .add(allergieOptional.isPresent() ? allergieOptional.get()
+			    : allergieDAO.save(new Allergie(dtoAllergie)));
 	}
 	// Management of medication duplicates
 	for (String dtoMedication : dto.getMedications()) {
-	    Optional<Medication> newMedication = medicationDAO.findByMedicationString(dtoMedication);
+	    Optional<Medication> newMedication = medicationDAO
+		    .findByMedicationString(dtoMedication);
 	    newRecord.getRecordMedications()
-		.add(newMedication.isPresent() ? newMedication.get()
-		    : medicationDAO.save(new Medication(dtoMedication)));
+		    .add(newMedication.isPresent() ? newMedication.get()
+			    : medicationDAO.save(new Medication(dtoMedication)));
 	}
 	person.setMedicalRecord(newRecord);
 	newRecord.setPerson(person);
@@ -95,7 +96,7 @@ public class MedicalRecordService {
     public MedicalRecordDto update(MedicalRecordDto dto) {
 	Person person;
 	Optional<Person> optionalPerson = personDAO.findByFirstNameAndLastName(dto.getFirstName(),
-	    dto.getLastName());
+		dto.getLastName());
 	if (optionalPerson == null || optionalPerson.isEmpty()) {
 	    throw new UnknownPersonException(dto.getFirstName(), dto.getLastName());
 	} else {
@@ -105,35 +106,39 @@ public class MedicalRecordService {
 	    }
 	}
 	person.getMedicalRecord()
-	    .setBirthdate(LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+		.setBirthdate(LocalDate.parse(dto.getBirthdate(),
+			DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	for (String dtoAllergie : dto.getAllergies()) {
 	    if (!person.getAllergiesSet().contains(dtoAllergie)) {
 		Optional<Allergie> allergieOptional = allergieDAO.findByAllergieString(dtoAllergie);
 		person.getMedicalRecord()
-		    .getRecordAllergies()
-		    .add(allergieOptional.isPresent() ? allergieOptional.get()
-			: allergieDAO.save(new Allergie(dtoAllergie)));
+			.getRecordAllergies()
+			.add(allergieOptional.isPresent() ? allergieOptional.get()
+				: allergieDAO.save(new Allergie(dtoAllergie)));
 	    }
 	}
 	for (String dtoMedication : dto.getMedications()) {
 	    if (!person.getMedicationsSet().contains(dtoMedication)) {
-		Optional<Medication> medicationOptional = medicationDAO.findByMedicationString(dtoMedication);
+		Optional<Medication> medicationOptional = medicationDAO
+			.findByMedicationString(dtoMedication);
 		person.getMedicalRecord()
-		    .getRecordMedications()
-		    .add(medicationOptional.isPresent() ? medicationOptional.get()
-			: medicationDAO.save(new Medication(dtoMedication)));
+			.getRecordMedications()
+			.add(medicationOptional.isPresent() ? medicationOptional.get()
+				: medicationDAO.save(new Medication(dtoMedication)));
 	    }
 	}
 	return new MedicalRecordDto(personDAO.save(person).getMedicalRecord());
     }
 
     @Transactional
-    public MedicalRecordDto delete(String firstName, String lastName) {
+    public String delete(String firstName, String lastName) {
 	Optional<MedicalRecord> optionalMedicalRecord = medicalRecordDAO
-	    .findByPersonFirstNameAndPersonLastName(firstName, lastName);
-	if (optionalMedicalRecord.isEmpty()) { throw new UnknownMedicalRecordException(firstName, lastName); }
-	return new MedicalRecordDto(
-	    medicalRecordDAO.deleteByPersonFirstNameAndPersonLastName(firstName, lastName));
+		.findByPersonFirstNameAndPersonLastName(firstName, lastName);
+	if (optionalMedicalRecord.isEmpty()) {
+	    throw new UnknownMedicalRecordException(firstName, lastName);
+	}
+	medicalRecordDAO.deleteByPersonFirstNameAndPersonLastName(firstName, lastName);
+	return "Medical record data deleted for person " + firstName + " " + lastName;
     }
 
     @Transactional

@@ -10,8 +10,9 @@ import com.safetynet.api.entity.MedicalRecord;
 
 public interface MedicalRecordRepository extends CrudRepository<MedicalRecord, Integer> {
 
-    Optional<MedicalRecord> findByPersonFirstNameAndPersonLastName(String firstName, String lastName);
+    Optional<MedicalRecord> findByPersonFirstNameAndPersonLastName(String firstName,
+	    String lastName);
 
-    MedicalRecord deleteByPersonFirstNameAndPersonLastName(String firstName, String lastName);
+    void deleteByPersonFirstNameAndPersonLastName(String firstName, String lastName);
 
 }

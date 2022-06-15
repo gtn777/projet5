@@ -26,9 +26,16 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+    /**
+     * @return all the person informations known in the database application.
+     */
     @GetMapping("/person")
     public Iterable<PersonDto> getAllPersons() { return personService.getAll(); }
 
+    /**
+     * @param dto
+     * @return the person information after created.
+     */
     @PostMapping("/person")
     public ResponseEntity<PersonDto> createPerson(@RequestBody PersonDto dto) {
 	logger.debug("Appel avec le body personDto: " + dto.toString());
@@ -37,6 +44,10 @@ public class PersonController {
 	return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    /**
+     * @param dto
+     * @return the person informations whose just updated
+     */
     @PutMapping("/person")
     public ResponseEntity<PersonDto> updatePerson(@RequestBody PersonDto dto) {
 	logger.debug("Appel avec le body personDto: " + dto.toString());
@@ -45,9 +56,15 @@ public class PersonController {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @return person deleted informations.
+     */
     @DeleteMapping("/person")
     public ResponseEntity<PersonDto> updatePerson(@RequestParam String firstName, String lastName) {
-	logger.debug("Appel avec les parametres firstName: " + firstName + " lastName: " + lastName);
+	logger.debug(
+		"Appel avec les parametres firstName: " + firstName + " lastName: " + lastName);
 	PersonDto result = personService.deletePerson(firstName, lastName);
 	logger.info("Résultat de la requete" + result);
 	return ResponseEntity.status(HttpStatus.OK).body(result);

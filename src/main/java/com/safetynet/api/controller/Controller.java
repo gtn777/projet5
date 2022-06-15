@@ -15,6 +15,10 @@ import com.safetynet.api.service.exception.DataAlreadyUpToDateException;
 import com.safetynet.api.service.exception.UnknownDataException;
 
 
+/**
+ * Abstract class controller, provide methods for all controller extended class to manage exception.
+ *
+ */
 @RestController
 public abstract class Controller {
 

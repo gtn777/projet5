@@ -25,15 +25,13 @@ public class FloodAlertService {
     @Autowired
     private HomeRepository homeRepository;
 
-    public Map<String, Set<FloodOrFireAlertPersonDto>> getData(
-	    Iterable<Integer> stations) {
+    public Map<String, Set<FloodOrFireAlertPersonDto>> getData(Iterable<Integer> stations) {
 	for (Integer station : stations) {
 	    if (!homeRepository.existsByStation(station))
 		throw new UnknownFireStationException(station);
 	}
 	Map<String, Set<FloodOrFireAlertPersonDto>> result = new HashMap<String, Set<FloodOrFireAlertPersonDto>>();
-	Iterable<Person> personsIterable = personRepository
-		.findAllByHomeStationIn(stations);
+	Iterable<Person> personsIterable = personRepository.findAllByHomeStationIn(stations);
 	if (personsIterable != null && personsIterable.iterator().hasNext()) {
 	    for (Person p : personsIterable) {
 		String address = p.getHome().getAddress();

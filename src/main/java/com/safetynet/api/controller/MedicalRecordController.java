@@ -22,22 +22,42 @@ public class MedicalRecordController extends Controller {
     @Autowired
     private MedicalRecordService medicalRecordService;
 
+    /**
+     * @return All the medical records.
+     */
     @GetMapping("/medicalRecord")
     public Iterable<MedicalRecordDto> getAll() { return medicalRecordService.getAll(); }
 
+    /**
+     * 
+     * @param dto json object MedicalRecordDto to be created.
+     * @return json object MedicalRecordDto after data created and saved in database.
+     */
     @PostMapping("/medicalRecord")
     public ResponseEntity<MedicalRecordDto> create(@RequestBody MedicalRecordDto dto) {
 	return ResponseEntity.status(HttpStatus.CREATED).body(medicalRecordService.create(dto));
     }
 
+    /**
+     * 
+     * @param dto json object MedicalRecordDto to be updated.
+     * @return json object MedicalRecordDto after data updated. *
+     */
     @PutMapping("/medicalRecord")
     public ResponseEntity<MedicalRecordDto> update(@RequestBody MedicalRecordDto dto) {
 	return ResponseEntity.status(HttpStatus.OK).body(medicalRecordService.update(dto));
     }
 
+    /**
+     * 
+     * @param firstName from person whose medical record will be deleted.
+     * @param lastName from person whose medical record will be deleted.
+     * @return message after person deleted.
+     */
     @DeleteMapping("/medicalRecord")
-    public ResponseEntity<MedicalRecordDto> delete(@RequestParam String firstName, String lastName) {
-	return ResponseEntity.status(HttpStatus.OK).body(medicalRecordService.delete(firstName, lastName));
+    public ResponseEntity<String> delete(@RequestParam String firstName, String lastName) {
+	return ResponseEntity.status(HttpStatus.OK)
+		.body(medicalRecordService.delete(firstName, lastName));
     }
 
 }

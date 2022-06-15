@@ -1,3 +1,4 @@
+
 package com.safetynet.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import com.safetynet.api.dto.ChildAlertDto;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.service.exception.UnknownAddressException;
-
-import lombok.Data;
 
 
 @Service

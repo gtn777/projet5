@@ -1,3 +1,4 @@
+
 package com.safetynet.api.repository;
 
 import java.util.Optional;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.api.entity.Home;
 
+
 @Repository
 public interface HomeRepository extends CrudRepository<Home, Integer> {
 
@@ -14,9 +16,10 @@ public interface HomeRepository extends CrudRepository<Home, Integer> {
 
     public Optional<Home> findByAddress(String address);
 
-    public Iterable<Home> findAllByStation(int station);    
+    public Iterable<Home> findAllByStation(int station);
 
     boolean existsByStationIn(Iterable<Integer> stations);
 
     boolean existsByStation(int station);
+
 }

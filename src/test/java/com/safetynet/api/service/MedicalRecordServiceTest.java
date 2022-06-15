@@ -1,6 +1,7 @@
 
 package com.safetynet.api.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -92,7 +93,8 @@ public class MedicalRecordServiceTest {
 
     @Test
     public void updateTest_whenMedicalReport_isUnknownForThePerson() {
-	when(personDAO.findByFirstNameAndLastName(firstName, lastName)).thenReturn(Optional.of(person));
+	when(personDAO.findByFirstNameAndLastName(firstName, lastName))
+		.thenReturn(Optional.of(person));
 	assertThrows(UnknownMedicalRecordException.class, () -> medicalRecordService.update(dto));
     }
 
@@ -118,7 +120,8 @@ public class MedicalRecordServiceTest {
     @Test
     public void createTest_withAllergieAndMedication_UnknownInDatabase() {
 	// GIVEN
-	when(personDAO.findByFirstNameAndLastName(firstName, lastName)).thenReturn(Optional.of(person));
+	when(personDAO.findByFirstNameAndLastName(firstName, lastName))
+		.thenReturn(Optional.of(person));
 	when(allergieDAO.findByAllergieString(allergie)).thenReturn(Optional.empty());
 	when(medicationDAO.findByMedicationString(medication)).thenReturn(Optional.empty());
 	when(personDAO.save(any(Person.class))).then(returnsFirstArg());
@@ -139,10 +142,12 @@ public class MedicalRecordServiceTest {
     @Test
     public void createTest_withAllergieAndMedication_AlreadyInDatabase() {
 	// GIVEN
-	when(personDAO.findByFirstNameAndLastName(firstName, lastName)).thenReturn(Optional.of(person));
-	when(allergieDAO.findByAllergieString(allergie)).thenReturn(Optional.of(new Allergie(allergie)));
+	when(personDAO.findByFirstNameAndLastName(firstName, lastName))
+		.thenReturn(Optional.of(person));
+	when(allergieDAO.findByAllergieString(allergie))
+		.thenReturn(Optional.of(new Allergie(allergie)));
 	when(medicationDAO.findByMedicationString(medication))
-	    .thenReturn(Optional.of(new Medication(medication)));
+		.thenReturn(Optional.of(new Medication(medication)));
 	when(personDAO.save(any(Person.class))).then(returnsFirstArg());
 	// WHEN
 	MedicalRecordDto result = medicalRecordService.create(dto);
@@ -163,7 +168,8 @@ public class MedicalRecordServiceTest {
 	mr.setPerson(person);
 	mr.setBirthdate(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	person.setMedicalRecord(mr);
-	when(personDAO.findByFirstNameAndLastName(firstName, lastName)).thenReturn(Optional.of(person));
+	when(personDAO.findByFirstNameAndLastName(firstName, lastName))
+		.thenReturn(Optional.of(person));
 	when(allergieDAO.findByAllergieString(allergie)).thenReturn(Optional.empty());
 	when(medicationDAO.findByMedicationString(medication)).thenReturn(Optional.empty());
 	when(personDAO.save(any(Person.class))).then(returnsFirstArg());
@@ -188,10 +194,12 @@ public class MedicalRecordServiceTest {
 	mr.setPerson(person);
 	mr.setBirthdate(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	person.setMedicalRecord(mr);
-	when(personDAO.findByFirstNameAndLastName(firstName, lastName)).thenReturn(Optional.of(person));
-	when(allergieDAO.findByAllergieString(allergie)).thenReturn(Optional.of(new Allergie(allergie)));
+	when(personDAO.findByFirstNameAndLastName(firstName, lastName))
+		.thenReturn(Optional.of(person));
+	when(allergieDAO.findByAllergieString(allergie))
+		.thenReturn(Optional.of(new Allergie(allergie)));
 	when(medicationDAO.findByMedicationString(medication))
-	    .thenReturn(Optional.of(new Medication(medication)));
+		.thenReturn(Optional.of(new Medication(medication)));
 	when(personDAO.save(any(Person.class))).then(returnsFirstArg());
 	// WHEN
 	MedicalRecordDto result = medicalRecordService.update(dto);
@@ -216,7 +224,8 @@ public class MedicalRecordServiceTest {
     @Test
     public void createTest_whenPeersonIsAlreadyCreatedInDatabase() {
 	person.setMedicalRecord(new MedicalRecord());
-	when(personDAO.findByFirstNameAndLastName(firstName, lastName)).thenReturn(Optional.of(person));
+	when(personDAO.findByFirstNameAndLastName(firstName, lastName))
+		.thenReturn(Optional.of(person));
 	assertThrows(DataAlreadyCreatedException.class, () -> medicalRecordService.create(dto));
     }
 
@@ -228,16 +237,15 @@ public class MedicalRecordServiceTest {
 	mr.setBirthdate(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	person.setMedicalRecord(mr);
 	when(medicalRecordDAO.findByPersonFirstNameAndPersonLastName(firstName, lastName))
-	    .thenReturn(Optional.of(person.getMedicalRecord()));
-	when(medicalRecordDAO.deleteByPersonFirstNameAndPersonLastName(firstName, lastName)).thenReturn(mr);
+		.thenReturn(Optional.of(person.getMedicalRecord()));
 	// WHEN
-	MedicalRecordDto result = medicalRecordService.delete(firstName, lastName);
+	String result = medicalRecordService.delete(firstName, lastName);
 	// THEN
 	verify(medicalRecordDAO, Mockito.times(1)).findByPersonFirstNameAndPersonLastName(firstName,
-	    lastName);
-	verify(medicalRecordDAO, Mockito.times(1)).deleteByPersonFirstNameAndPersonLastName(firstName,
-	    lastName);
-	assertEquals(result, new MedicalRecordDto(person.getMedicalRecord()));
+		lastName);
+	verify(medicalRecordDAO, Mockito.times(1))
+		.deleteByPersonFirstNameAndPersonLastName(firstName, lastName);
+	assertThat(result.contains("deleted" + firstName));
     }
 
     @Test

@@ -54,6 +54,12 @@ public class AlertController extends Controller {
     @Autowired
     FireStationCoverageService fireStationCoverageService;
 
+    /**
+     * @param station
+     * @return the list of the people, and their informations, whose home is covered by
+     * the station param, also return a count of adults and children for the covered
+     * people.
+     */
     @GetMapping("/firestation")
     public ResponseEntity<FireStationCoverageDto> getCoverageDataByStationNumber(
 	    @RequestParam int station) {
@@ -63,6 +69,12 @@ public class AlertController extends Controller {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param address
+     * @return a json object with child alert informations corresponding to the home from
+     * address param.
+     * 
+     */
     @GetMapping("/childAlert")
     public ResponseEntity<ChildAlertDto> getChildAlert(@RequestParam String address) {
 	logger.debug("Appel avec le parametre adresse: " + address);
@@ -71,6 +83,10 @@ public class AlertController extends Controller {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param firestation
+     * @return a set of phone corresponding to the station coverage.
+     */
     @GetMapping("/phoneAlert")
     public ResponseEntity<PhoneAlertDto> getPhoneAlert(@RequestParam int firestation) {
 	logger.debug("Appel avec le parametre station: " + firestation);
@@ -79,6 +95,10 @@ public class AlertController extends Controller {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param city
+     * @return a set of email corresponding to the people from city param.
+     */
     @GetMapping("/communityEmail")
     public ResponseEntity<Iterable<String>> getCommunityEmail(@RequestParam String city) {
 	logger.debug("Appel avec le parametre city: " + city);
@@ -87,6 +107,11 @@ public class AlertController extends Controller {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param firstName
+     * @param lastName
+     * @return the person name, address, age, email, medications and allergies.
+     */
     @GetMapping("/personInfo")
     public ResponseEntity<Set<PersonInfoDto>> getPersonInfo(@RequestParam String firstName,
 	    String lastName) {
@@ -97,6 +122,12 @@ public class AlertController extends Controller {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param stations
+     * @return a map, return a list of person with their name, phone, age, medications
+     * and allergies corresponding to the stations param coverage, persons are grouped by
+     * address.
+     */
     @GetMapping("/flood")
     public ResponseEntity<Map<String, Set<FloodOrFireAlertPersonDto>>> getFloodAlert(
 	    @RequestParam Set<Integer> stations) {
@@ -106,6 +137,11 @@ public class AlertController extends Controller {
 	return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * @param address
+     * @return the station number mapped to the address, and a list of person living at
+     * the address with their name, age, phone, medications and allergies informations.
+     */
     @GetMapping("/fire")
     public ResponseEntity<FireAlertDto> getFireAlert(@RequestParam String address) {
 	logger.debug("Appel avec le parametre adresse: " + address);

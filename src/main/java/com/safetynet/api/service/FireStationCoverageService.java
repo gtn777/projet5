@@ -17,10 +17,8 @@ public class FireStationCoverageService {
     private PersonRepository personRepository;
 
     public FireStationCoverageDto getData(int station) {
-	Iterable<Person> findAllByHomeStation = personRepository
-		.findAllByHomeStation(station);
-	if ((findAllByHomeStation != null)
-		&& (findAllByHomeStation.iterator().hasNext())) {
+	Iterable<Person> findAllByHomeStation = personRepository.findAllByHomeStation(station);
+	if ((findAllByHomeStation != null) && (findAllByHomeStation.iterator().hasNext())) {
 	    return new FireStationCoverageDto(findAllByHomeStation);
 	} else {
 	    throw new UnknownFireStationException(station);
