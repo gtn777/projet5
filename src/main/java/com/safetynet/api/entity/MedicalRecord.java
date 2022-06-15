@@ -42,13 +42,13 @@ public class MedicalRecord {
     private LocalDate birthdate;
 
     @ManyToMany(targetEntity = Allergie.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinTable(name = "medical_record_allergie", joinColumns = @JoinColumn(name = "medical_record_id"), inverseJoinColumns = @JoinColumn(name = "allergie_id"))
+    @JoinTable(name = "record_allergie", joinColumns = @JoinColumn(name = "medical_record_id"), inverseJoinColumns = @JoinColumn(name = "allergie_id"))
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     Set<Allergie> recordAllergies = new HashSet<Allergie>();
 
     @ManyToMany(targetEntity = Medication.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinTable(name = "medical_record_medication", joinColumns = @JoinColumn(name = "medical_record_id"), inverseJoinColumns = @JoinColumn(name = "medication_id"))
+    @JoinTable(name = "record_medication", joinColumns = @JoinColumn(name = "medical_record_id"), inverseJoinColumns = @JoinColumn(name = "medication_id"))
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     Set<Medication> recordMedications = new HashSet<Medication>();
